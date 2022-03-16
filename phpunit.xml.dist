@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="tests/bootstrap.php"
+         convertDeprecationsToExceptions="false"
+         testdox="true"
+>
+    <php>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="-1"/>
+        <server name="SHELL_VERBOSITY" value="-1"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <clover outputFile="build/reports/coverage.xml"/>
+            <html outputDirectory="build/reports/coverage"/>
+        </report>
+    </coverage>
+
+    <extensions>
+        <extension class="PlanB\Testing\PhpUnit\Hook\BypassFinalHook"/>
+    </extensions>
+
+    <logging>
+        <junit outputFile="build/reports/tests.xml"/>
+    </logging>
+
+</phpunit>

@@ -1,0 +1,35 @@
+{
+  "name": "planb/planb-bundle",
+  "description": "planb bundle",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "PlanB\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PlanB\\Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "jmpantoja",
+      "email": "jmpantoja@gmail.com"
+    }
+  ],
+  "config": {
+    "bin-dir": "bin"
+  },
+  "require": {
+    "php": ">=8.1",
+    "ext-ctype": "*",
+    "ext-iconv": "*"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^6.0",
+    "phpunit/phpunit": "^9.5",
+    "jetbrains/phpstorm-attributes": "^1.0"
+  }
+}

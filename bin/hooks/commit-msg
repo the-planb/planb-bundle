@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# build the regex pattern based on the config file
+function build_regex() {
+  types=('feat' 'fix' 'refactor' 'style' 'test' 'build' 'perf' 'ci' 'docs' 'chore')
+  min_length=1
+  max_length=52
+
+  regexp="^([Rr]evert|[Mm]erge):? )?.*$|^("
+
+  for type in "${types[@]}"; do
+    regexp="${regexp}$type|"
+  done
+
+  regexp="${regexp%|})(\(.+\))?: "
+
+  regexp="${regexp}.{$min_length,$max_length}$"
+}
+
+# Print out a standard error message which explains
+# how the commit message should be structured
+function print_error() {
+  commit_message=$START_LINE
+  regular_expression=$regexp
+
+#  underline=$(tput smul)
+#  nounderline=$(tput rmul)
+  bold=$(tput bold)
+  normal=$(tput sgr0)
+
+  echo -e "\n\e[31m${bold}                                          Invalid Commit Message                                                 \n"
+  echo -e "\033[0m                                     <type>(scope): message [#issue]                                             \n"
+  echo -e "${bold}  ============================================= Valid types =============================================${normal}\n"
+
+  echo -e "  ${bold}feat:\n${normal}  A new feature\n"
+  echo -e "  ${bold}fix:\n${normal}  A bug fix\n"
+  echo -e "  ${bold}refactor:\n${normal}  A code change that neither fixes a bug nor adds a feature\n"
+  echo -e "  ${bold}style:\n${normal}  Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)\n"
+  echo -e "  ${bold}test:\n${normal}  Adding missing tests or correcting existing tests\n"
+  echo -e "  ${bold}build:\n${normal}  Changes that affect the build system or external dependencies (example scopes: gulp, composer, npm)\n"
+  echo -e "  ${bold}perf:\n${normal}  A code change that improves performance\n"
+  echo -e "  ${bold}ci:\n${normal}  Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)\n"
+  echo -e "  ${bold}docs:\n${normal}  Documentation only changes\n"
+  echo -e "  ${bold}chore:\n${normal}  Create a new tagged release\n"
+
+  echo -e "${bold}\n  ================================================ Info =================================================${normal}\n"
+
+  echo -e "${bold}\e[37m  Message: ${normal} \e[33m${commit_message}\033[0m"
+  echo -e "${bold}  Length: ${normal} \e[33m$(echo $commit_message | wc -c) (min: $min_length, max: $max_length)\033[0m"
+  echo -e "${bold}\e[37m  Regex: ${normal} \e[33m$regular_expression\033[0m"
+}
+
+#set_config
+#
+## check if the repo has a sailr config file
+#check_sailr_config
+#
+## make sure jq is installed
+#check_jq_exists_and_executable
+
+# get the first line of the commit message
+INPUT_FILE=$1
+START_LINE=$(head -n1 $INPUT_FILE)
+
+build_regex
+
+if [[ ! $START_LINE =~ $regexp ]]; then
+  # commit message is invalid according to config - block commit
+  print_error
+  exit 1
+fi
