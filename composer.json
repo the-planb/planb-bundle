@@ -39,7 +39,10 @@
     "symfony/yaml": "^6.0",
     "symfony/finder": "^6.0",
     "symfony/dependency-injection": "^6.0",
-    "jetbrains/phpstorm-attributes": "^1.0"
+    "jetbrains/phpstorm-attributes": "^1.0",
+    "doctrine/dbal": "^3.3",
+    "nesbot/carbon": "^2.57",
+    "symfony/serializer": "^6.0"
   },
   "require-dev": {
     "symfony/var-dumper": "^6.0",

@@ -1,0 +1,26 @@
+parameters:
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  PlanB\Domain\:
+    resource: '../../../../src/Domain'
+
+  PlanB\UseCase\:
+    resource: '../../../../src/UseCase'
+
+  PlanB\Framework\:
+    resource: '../../../../src/Framework'
+
+  planb.serializer.normalizer.carbon:
+    class: PlanB\Framework\Api\Normalizer\CarbonNormalizer
+    tags:
+      - { name: serializer.normalizer, priority: 0 }
+
+  serializer.normalizer.datetime:
+    class: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+    arguments:
+      - !php/const \Symfony\Component\Serializer\Normalizer\DateTimeNormalizer::FORMAT_KEY: 'Y-m-d H:i:s'
+    tags:
+      - { name: serializer.normalizer, priority: -900 }

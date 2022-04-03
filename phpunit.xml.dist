@@ -25,6 +25,9 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory>src/Bundle</directory>
+        </exclude>
         <report>
             <clover outputFile="build/reports/coverage.xml"/>
             <html outputDirectory="build/reports/coverage"/>
