@@ -1,0 +1,15 @@
+<doctrine-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="PlanB\Domain\Event\Event" table="events_store">
+
+        <id name="id" type="EventId"/>
+
+        <field name="name"/>
+        <field name="event" type="text"/>
+        <field name="date" type="datetime_immutable"/>
+    </entity>
+
+</doctrine-mapping>
