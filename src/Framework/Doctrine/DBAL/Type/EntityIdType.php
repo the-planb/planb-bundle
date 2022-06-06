@@ -17,15 +17,16 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use InvalidArgumentException;
-use Symfony\Component\Uid\Ulid;
 use PlanB\Domain\Model\EntityId;
+use Symfony\Component\Uid\Ulid;
+
 use function is_string;
 
 abstract class EntityIdType extends Type
 {
     public const NAME = 'EntityId';
 
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         if ($platform->hasNativeGuidType()) {
             return $platform->getGuidTypeDeclarationSQL($column);
@@ -33,11 +34,11 @@ abstract class EntityIdType extends Type
 
         return $platform->getBinaryTypeDeclarationSQL([
             'length' => '16',
-            'fixed'  => true,
+            'fixed' => true,
         ]);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): EntityId
     {
         if ($value instanceof EntityId || null === $value) {
             return $value;
@@ -60,7 +61,7 @@ abstract class EntityIdType extends Type
 
     abstract public function makeFromValue(string $value): EntityId;
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         $toString = $platform->hasNativeGuidType() ? 'toRfc4122' : 'toBinary';
 

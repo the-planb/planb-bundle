@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace PlanB\Domain\Event\Traits;
 
-
 use PlanB\Domain\Event\DomainEventDispatcher;
 use PlanB\Domain\Event\DomainEventInterface;
 

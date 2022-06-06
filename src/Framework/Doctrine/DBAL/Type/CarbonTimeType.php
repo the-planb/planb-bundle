@@ -27,7 +27,7 @@ final class CarbonTimeType extends TimeType
         return self::NAME;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): Carbon
     {
         $result = parent::convertToPHPValue($value, $platform);
 
