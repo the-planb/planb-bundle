@@ -13,18 +13,12 @@ declare(strict_types=1);
 
 namespace PlanB\Framework\Doctrine\DBAL\Type;
 
-use PlanB\Domain\Event\EventId;
-use PlanB\Domain\Model\EntityId;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-final class EventIdType extends EntityIdType
+abstract class TextType extends StringType
 {
-    public function makeFromValue(string $value): EntityId
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return new EventId($value);
-    }
-
-    public function getName(): string
-    {
-        return 'EventId';
+        return $platform->getClobTypeDeclarationSQL($column);
     }
 }

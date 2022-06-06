@@ -27,7 +27,7 @@ final class CarbonTimeImmutableType extends TimeImmutableType
         return self::NAME;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): CarbonImmutable
     {
         $result = parent::convertToPHPValue($value, $platform);
 
