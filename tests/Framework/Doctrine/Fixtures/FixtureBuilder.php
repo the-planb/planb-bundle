@@ -1,0 +1,138 @@
+<?php
+
+namespace PlanB\Tests\Framework\Doctrine\Fixtures;
+
+use Doctrine\Common\DataFixtures\ReferenceRepository;
+use League\Tactician\CommandBus;
+use PlanB\Framework\Doctrine\Fixtures\UseCaseFixture;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Kernel;
+
+final class FixtureBuilder
+{
+
+    private string $env;
+    private CommandBus|ObjectProphecy $commandBus;
+    private ReferenceRepository|ObjectProphecy $referenceRepository;
+
+    private $prophesize;
+
+
+    public function __construct(callable $prophesize)
+    {
+        $this->env = 'dev';
+        $this->prophesize = $prophesize;
+
+        $this->commandBus = ($this->prophesize)(CommandBus::class);
+        $this->referenceRepository = ($this->prophesize)(ReferenceRepository::class);
+    }
+
+    public function thatWillCallHandle(object $command, int $times): self
+    {
+        $this->commandBus
+            ->handle($command)
+            ->shouldBeCalledTimes($times);
+
+        return $this;
+    }
+
+    public function thatWillNeverHandle(): self
+    {
+        $this->commandBus
+            ->handle(Argument::any())
+            ->shouldNotBeCalled();
+
+        return $this;
+    }
+
+    public function thatWillAddReferences(string $type, int $times): self
+    {
+        $this->referenceRepository
+            ->addReference(Argument::containingString($type), Argument::type($type))
+            ->shouldBeCalledTimes($times);
+
+
+        $references = [$type => []];
+        foreach (range(0, $times) as $key) {
+            $references["{$type}_{$key}"] = ($this->prophesize)(\stdClass::class)->reveal();
+        }
+
+        $this->referenceRepository
+            ->getReferencesByClass()
+            ->willReturn($references);
+
+        return $this;
+    }
+
+    public function thatHaveReferences(string $type, int $count): self
+    {
+        $references = [$type => []];
+        foreach (range(0, $count) as $key) {
+            $references[$type]["{$type}_{$key}"] = ($this->prophesize)(\stdClass::class)->reveal();
+        }
+
+        $this->referenceRepository
+            ->getReferencesByClass()
+            ->willReturn($references);
+
+        $keys = array_keys($references[$type]);
+        $this->referenceRepository
+            ->getReference(Argument::in($keys), Argument::cetera())
+            ->willReturn(($this->prophesize)(\stdClass::class)->reveal());
+
+        return $this;
+    }
+
+
+    public function withEnvironment(string $env): self
+    {
+        $this->env = $env;
+        return $this;
+    }
+
+
+    public function please(): UseCaseFixture
+    {
+        $container = ($this->prophesize)(ContainerInterface::class);
+        $kernel = ($this->prophesize)(Kernel::class);
+        $kernel->getEnvironment()
+            ->willReturn($this->env);
+
+        $container
+            ->get('kernel')
+            ->willReturn($kernel);
+
+        $fixture = new FixtureExample($this->commandBus->reveal());
+        $fixture->setContainer($container->reveal());
+        $fixture->setReferenceRepository($this->referenceRepository->reveal());
+
+        return $fixture;
+    }
+}
+
+class FixtureExample extends UseCaseFixture
+{
+
+    public function loadData(): void
+    {
+        $this->createMany(10, function () {
+            $this->handle(new \stdClass());
+
+            return new \stdClass();
+        });
+
+        $this->loadSqlFile(__DIR__ . '/data/data.sql');
+    }
+
+//    public function getReference($name, ?string $class = null)
+//    {
+//        return $this->referenceRepository->getReference($name, $class);
+//    }
+
+    protected function allowedEnvironments(): array
+    {
+        return ['dev'];
+    }
+}
