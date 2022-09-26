@@ -5,7 +5,7 @@ tests:
 	bin/phpunit --no-coverage ${ARGS}
 
 coverage:
-	bin/phpunit ${ARGS}
+	XDEBUG_MODE=coverage bin/phpunit ${ARGS}
 
 qa:
 	bin/qa src
