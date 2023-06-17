@@ -33,6 +33,7 @@
     "ext-ctype": "*",
     "ext-iconv": "*",
     "planb/planb": "^1.0",
+    "api-platform/core": "^3.0",
     "symfony/uid": "^6.0",
     "symfony/http-kernel": "^6.0",
     "symfony/config": "^6.0",

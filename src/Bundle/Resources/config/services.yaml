@@ -13,6 +13,7 @@ services:
   PlanB\Framework\:
     resource: '../../../../src/Framework'
 
+  # serializer
   planb.serializer.normalizer.carbon:
     class: PlanB\Framework\Api\Normalizer\CarbonNormalizer
     tags:
@@ -24,3 +25,14 @@ services:
       - !php/const \Symfony\Component\Serializer\Normalizer\DateTimeNormalizer::FORMAT_KEY: 'Y-m-d H:i:s'
     tags:
       - { name: serializer.normalizer, priority: -900 }
+
+  #  filters
+  planb.doctrine.orm.text_filter:
+    class: PlanB\Framework\Api\Filter\TextFilter
+    arguments:
+      $managerRegistry: '@doctrine'
+      $logger: '@?logger'
+      $properties: ~
+      $nameConverter: '@?api_platform.name_converter'
+
+    tags: [ 'api_platform.filter' ]
