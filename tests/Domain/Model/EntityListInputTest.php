@@ -33,7 +33,7 @@ final class EntityListInputTest extends TestCase
 
         $listInput = new EntityListInputExample($data);
         $listInput
-            ->add($invoker->adder(...))
+            ->create($invoker->adder(...))
             ->with([
                 $entityB,
             ]);
@@ -93,7 +93,7 @@ final class EntityListInputTest extends TestCase
 
         $listInput = new EntityListInputExample($data);
         $listInput
-            ->attach($invoker->attacher(...))
+            ->add($invoker->attacher(...))
             ->with([
                 $entityB,
             ]);

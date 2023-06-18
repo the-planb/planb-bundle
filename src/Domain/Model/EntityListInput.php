@@ -10,13 +10,13 @@ use PlanB\DS\Sequence\Sequence;
 #[ElementType(Entity::class, 'array')]
 abstract class EntityListInput extends Sequence
 {
-    private mixed $adder = null;
+    private mixed $creator = null;
     private mixed $remover = null;
-    private mixed $attacher = null;
+    private mixed $adder = null;
 
-    public function add(callable $callback): self
+    public function create(callable $callback): self
     {
-        $this->adder = $callback;
+        $this->creator = $callback;
 
         return $this;
     }
@@ -28,9 +28,9 @@ abstract class EntityListInput extends Sequence
         return $this;
     }
 
-    public function attach(callable $callback): self
+    public function add(callable $callback): self
     {
-        $this->attacher = $callback;
+        $this->adder = $callback;
 
         return $this;
     }
@@ -41,12 +41,12 @@ abstract class EntityListInput extends Sequence
             ($this->remover)($item->getId());
         }
 
-        foreach ($this->getCandidatesForAttach() as $item) {
-            ($this->attacher)($item);
+        foreach ($this->getCandidatesForAdd() as $item) {
+            ($this->adder)($item);
         }
 
-        foreach ($this->getCandidatesForAdd() as $item) {
-            ($this->adder)(...$item);
+        foreach ($this->getCandidatesForCreate() as $item) {
+            ($this->creator)(...$item);
         }
 
         return $this;
@@ -66,18 +66,18 @@ abstract class EntityListInput extends Sequence
         });
     }
 
-    private function getCandidatesForAttach(): iterable
+    private function getCandidatesForAdd(): iterable
     {
-        if (!is_callable($this->attacher)) {
+        if (!is_callable($this->adder)) {
             return [];
         }
 
         return $this->filter(fn (mixed $item) => $item instanceof Entity);
     }
 
-    private function getCandidatesForAdd(): iterable
+    private function getCandidatesForCreate(): iterable
     {
-        if (!is_callable($this->adder)) {
+        if (!is_callable($this->creator)) {
             return [];
         }
 
