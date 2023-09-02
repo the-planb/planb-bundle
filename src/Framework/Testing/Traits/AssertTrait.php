@@ -17,7 +17,7 @@ trait AssertTrait
 
         foreach ($expected as $key => $value) {
             $stored = $propertyAccessor->getValue($object, $key);
-            $this->assertEquals($value, $stored, "Property Name: ${key}");
+            $this->assertEquals($value, $stored, "Property Name: {$key}");
         }
     }
 }

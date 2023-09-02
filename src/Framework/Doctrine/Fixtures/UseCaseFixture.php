@@ -81,7 +81,7 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
 
     protected function referenceName(string $className, int $key): string
     {
-        return "${className}_${key}";
+        return "{$className}_{$key}";
     }
 
     public function getSomeReferences(string $className, int $min, int $max = null): array
