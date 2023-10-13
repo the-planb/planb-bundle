@@ -26,6 +26,18 @@ services:
     tags:
       - { name: serializer.normalizer, priority: -900 }
 
+  api_platform.http_cache.listener.response.configure:
+    class: PlanB\Framework\Api\Symfony\EventListener\AddHeadersListener
+    arguments:
+      $etag: '%api_platform.http_cache.etag%'
+      $maxAge: '%api_platform.http_cache.max_age%'
+      $sharedMaxAge: '%api_platform.http_cache.shared_max_age%'
+      $vary: '%api_platform.http_cache.vary%'
+      $public: '%api_platform.http_cache.public%'
+      $resourceMetadataCollectionFactory: '@api_platform.metadata.resource.metadata_collection_factory'
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: -1 }
+
   #  filters
   planb.doctrine.orm.text_filter:
     class: PlanB\Framework\Api\Filter\TextFilter
