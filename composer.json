@@ -48,7 +48,8 @@
     "doctrine/doctrine-bundle": "^2.7",
     "doctrine/orm": "^2.13",
     "doctrine/doctrine-fixtures-bundle": "^3.4",
-    "fakerphp/faker": "^1.20"
+    "fakerphp/faker": "^1.20",
+    "symfony/security-core": "^6.3"
   },
   "require-dev": {
     "symfony/var-dumper": "^6.0",

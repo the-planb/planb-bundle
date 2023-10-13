@@ -1,0 +1,3 @@
+_fos_user_context_hash:
+  path: /_fos_user_context_hash
+  controller: \PlanB\Framework\Api\Symfony\Controller\FosUserContextHash

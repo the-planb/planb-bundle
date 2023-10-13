@@ -38,12 +38,12 @@ final class TextFilter extends AbstractFilter
         $alias = $queryBuilder->getRootAliases()[0];
         $field = $property;
 
-//        $associations = [];
-//        $metadata = $this->getNestedMetadata($resourceClass, $associations);
-//
-//        if (!$metadata->hasField($field)) {
-//            return;
-//        }
+        //        $associations = [];
+        //        $metadata = $this->getNestedMetadata($resourceClass, $associations);
+        //
+        //        if (!$metadata->hasField($field)) {
+        //            return;
+        //        }
 
         foreach ($value as $strategy => $term) {
             $term = mb_strtolower($term);
@@ -65,9 +65,9 @@ final class TextFilter extends AbstractFilter
         $description = [];
 
         $properties = $this->getProperties();
-//        if (null === $properties) {
-//            $properties = array_fill_keys($this->getClassMetadata($resourceClass)->getFieldNames(), null);
-//        }
+        //        if (null === $properties) {
+        //            $properties = array_fill_keys($this->getClassMetadata($resourceClass)->getFieldNames(), null);
+        //        }
 
         foreach ($properties as $property => $nullManagement) {
             $description += $this->getFilterDescription($property, self::STRATEGY_EXACT);
