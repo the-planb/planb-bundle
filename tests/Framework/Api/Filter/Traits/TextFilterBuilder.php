@@ -25,7 +25,6 @@ final class TextFilterBuilder
         return $this;
     }
 
-
     public function please()
     {
         $metadata = ($this->prophesize)(ClassMetadata::class);
