@@ -1,0 +1,75 @@
+<?php
+
+namespace PlanB\Framework\Api\Symfony\EventListener;
+
+use ApiPlatform\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
+use ApiPlatform\State\Util\OperationRequestInitiatorTrait;
+use ApiPlatform\Symfony\Util\RequestAttributesExtractor;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+
+/**
+ * @codeCoverageIgnore
+ */
+final class AddHeadersListener
+{
+    use OperationRequestInitiatorTrait;
+
+    public function __construct(private readonly bool $etag = false, private readonly ?int $maxAge = null, private readonly ?int $sharedMaxAge = null, private readonly ?array $vary = null, private readonly ?bool $public = null, ResourceMetadataCollectionFactoryInterface $resourceMetadataCollectionFactory = null, private readonly ?int $staleWhileRevalidate = null, private readonly ?int $staleIfError = null)
+    {
+        $this->resourceMetadataCollectionFactory = $resourceMetadataCollectionFactory;
+    }
+
+    public function onKernelResponse(ResponseEvent $event): void
+    {
+        $request = $event->getRequest();
+        if (!$request->isMethodCacheable() || $request->attributes->get('_api_platform_disable_listeners')) {
+            return;
+        }
+
+        $attributes = RequestAttributesExtractor::extractAttributes($request);
+        if (\count($attributes) < 1) {
+            return;
+        }
+
+        $response = $event->getResponse();
+
+        if (!$response->getContent() || !$response->isSuccessful()) {
+            return;
+        }
+
+        $operation = $this->initializeOperation($request);
+        $resourceCacheHeaders = $attributes['cache_headers'] ?? $operation?->getCacheHeaders() ?? [];
+
+        if ($this->etag && !$response->getEtag()) {
+            $response->setEtag(md5((string)$response->getContent()));
+        }
+
+        if (null !== ($maxAge = $resourceCacheHeaders['max_age'] ?? $this->maxAge) && !$response->headers->hasCacheControlDirective('max-age')) {
+            $response->setMaxAge((int)$maxAge);
+        }
+
+        $vary = $resourceCacheHeaders['vary'] ?? $this->vary;
+        if (null !== $vary) {
+            $response->setVary(array_diff($vary, $response->getVary()), false);
+        }
+
+        // if the public-property is defined and not yet set; apply it to the response
+        $public = ($resourceCacheHeaders['public'] ?? $this->public);
+        if (null !== $public && !$response->headers->hasCacheControlDirective('public')) {
+            $public ? $response->setPublic() : $response->setPrivate();
+        }
+
+        // Cache-Control "s-maxage" is only relevant is resource is not marked as "private"
+        if (false !== $public && null !== ($sharedMaxAge = $resourceCacheHeaders['shared_max_age'] ?? $this->sharedMaxAge) && !$response->headers->hasCacheControlDirective('s-maxage')) {
+            $response->setSharedMaxAge((int)$sharedMaxAge);
+        }
+
+        if (null !== ($staleWhileRevalidate = $resourceCacheHeaders['stale_while_revalidate'] ?? $this->staleWhileRevalidate) && !$response->headers->hasCacheControlDirective('stale-while-revalidate')) {
+            $response->headers->addCacheControlDirective('stale-while-revalidate', (string)$staleWhileRevalidate);
+        }
+
+        if (null !== ($staleIfError = $resourceCacheHeaders['stale_if_error'] ?? $this->staleIfError) && !$response->headers->hasCacheControlDirective('stale-if-error')) {
+            $response->headers->addCacheControlDirective('stale-if-error', (string)$staleIfError);
+        }
+    }
+}
