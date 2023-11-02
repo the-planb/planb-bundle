@@ -27,8 +27,11 @@ final class CarbonDateTimeImmutableType extends DateTimeImmutableType
         return self::NAME;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): CarbonImmutable
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?CarbonImmutable
     {
+        if (is_null($value)) {
+            return null;
+        }
         $result = parent::convertToPHPValue($value, $platform);
 
         if ($result instanceof DateTimeInterface) {

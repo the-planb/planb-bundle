@@ -24,8 +24,12 @@ abstract class ArrayType extends ValueObjectType
         return $platform->getJsonTypeDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ArrayValue
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?ArrayValue
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         $type = $this->getFQN();
 
         try {
@@ -45,8 +49,12 @@ abstract class ArrayType extends ValueObjectType
         }
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         if (is_array($value) or $value instanceof \JsonSerializable) {
             return json_encode($value, JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION);
         }
@@ -64,6 +72,6 @@ abstract class ArrayType extends ValueObjectType
 
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
-        return ! $platform->hasNativeJsonType();
+        return !$platform->hasNativeJsonType();
     }
 }

@@ -24,8 +24,11 @@ abstract class BooleanType extends ValueObjectType
         return $platform->getBooleanTypeDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): BooleanValue
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?BooleanValue
     {
+        if (is_null($value)) {
+            return null;
+        }
         $type = $this->getFQN();
         try {
             return new $type($value);
@@ -38,8 +41,12 @@ abstract class BooleanType extends ValueObjectType
         }
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): bool
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?bool
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         if (is_bool($value)) {
             return $value;
         }
