@@ -21,11 +21,14 @@ abstract class StringType extends ValueObjectType
 {
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return $platform->getVarcharTypeDeclarationSQL($column);
+        return $platform->getStringTypeDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): StringValue
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?StringValue
     {
+        if (is_null($value)) {
+            return null;
+        }
         $type = $this->getFQN();
         try {
             return new $type($value);
@@ -38,8 +41,12 @@ abstract class StringType extends ValueObjectType
         }
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         if (is_string($value)) {
             return $value;
         }

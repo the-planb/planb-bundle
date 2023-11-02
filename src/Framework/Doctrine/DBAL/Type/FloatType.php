@@ -24,8 +24,12 @@ abstract class FloatType extends ValueObjectType
         return $platform->getFloatDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): FloatValue
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?FloatValue
     {
+        if (is_null($value)) {
+            return null;
+        }
+        $value = $this->likeFloat($value);
         $type = $this->getFQN();
         try {
             return new $type($value);
@@ -38,8 +42,25 @@ abstract class FloatType extends ValueObjectType
         }
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): float
+    private function likeFloat(mixed $value): mixed
     {
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        if ((string)(float)$value === $value) {
+            return (float)$value;
+        }
+        return $value;
+    }
+
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?float
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        $value = $this->likeFloat($value);
         if (is_float($value)) {
             return $value;
         }

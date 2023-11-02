@@ -30,9 +30,11 @@ final class CarbonTypesTest extends TestCase
         $platform = new MySQL80Platform();
 
         $this->assertInstanceOf($expected, $type->convertToPHPValue($good, $platform));
+        $this->assertNull($type->convertToPHPValue(null, $platform));
 
         $this->assertTrue($type->requiresSQLCommentHint($platform));
         $this->assertSame($name, $type->getName());
+
 
         $this->expectException(ConversionException::class);
         $type->convertToPHPValue($bad, $platform);
@@ -40,10 +42,10 @@ final class CarbonTypesTest extends TestCase
 
     public function CarbonTypeProvider()
     {
-        $time     = '12:12:12';
-        $date     = '2012-03-01';
+        $time = '12:12:12';
+        $date = '2012-03-01';
         $dateTime = '2012-03-01 12:12:12';
-        $bad      = '2012/03/01 12h12m12s';
+        $bad = '2012/03/01 12h12m12s';
 
         return [
             ['time_immutable', new CarbonTimeImmutableType(), CarbonImmutable::class, $time, $dateTime],

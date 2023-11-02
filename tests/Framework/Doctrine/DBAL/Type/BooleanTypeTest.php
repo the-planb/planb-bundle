@@ -26,6 +26,10 @@ final class BooleanTypeTest extends TestCase
         $this->assertSame('TINYINT(1)', $type->getSQLDeclaration([], $platform));
         $this->assertTrue($type->requiresSQLCommentHint($platform));
         $this->assertSame('BooleanExample', $type->getName());
+
+        $this->assertNull($type->convertToPHPValue(null, $platform));
+
+        $this->assertNull($type->convertToDatabaseValue(null, $platform));
     }
 
     private function makeType()

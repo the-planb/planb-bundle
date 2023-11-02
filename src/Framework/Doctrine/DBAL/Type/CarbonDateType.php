@@ -27,8 +27,11 @@ final class CarbonDateType extends DateType
         return self::NAME;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): Carbon
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Carbon
     {
+        if (is_null($value)) {
+            return null;
+        }
         $result = parent::convertToPHPValue($value, $platform);
         if ($result instanceof DateTimeInterface) {
             $result = Carbon::instance($result)->setTime(0, 0);

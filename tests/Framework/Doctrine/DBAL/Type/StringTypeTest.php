@@ -26,6 +26,9 @@ final class StringTypeTest extends TestCase
         $this->assertSame('VARCHAR(255)', $type->getSQLDeclaration([], $platform));
         $this->assertTrue($type->requiresSQLCommentHint($platform));
         $this->assertSame('StringExample', $type->getName());
+
+        $this->assertNull($type->convertToPHPValue(null, $platform));
+        $this->assertNull($type->convertToDatabaseValue(null, $platform));
     }
 
 

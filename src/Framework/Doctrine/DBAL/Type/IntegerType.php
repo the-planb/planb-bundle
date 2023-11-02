@@ -24,9 +24,14 @@ abstract class IntegerType extends ValueObjectType
         return $platform->getIntegerTypeDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): IntegerValue
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?IntegerValue
     {
+        if (is_null($value)) {
+            return null;
+        }
+        $value = $this->likeInt($value);
         $type = $this->getFQN();
+
         try {
             return new $type($value);
         } catch (\Throwable) {
@@ -38,8 +43,27 @@ abstract class IntegerType extends ValueObjectType
         }
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): int
+    private function likeInt(mixed $value): mixed
     {
+        if (!is_string($value)) {
+            return $value;
+        }
+
+
+        if ((string)(int)$value === $value) {
+            return (int)$value;
+        }
+        return $value;
+    }
+
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        $value = $this->likeInt($value);
+
         if (is_int($value)) {
             return $value;
         }

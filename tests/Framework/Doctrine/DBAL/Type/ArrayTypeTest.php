@@ -28,6 +28,9 @@ final class ArrayTypeTest extends TestCase
         $this->assertSame('JSON', $type->getSQLDeclaration([], $platform));
         $this->assertFalse($type->requiresSQLCommentHint($platform));
         $this->assertSame('ArrayExample', $type->getName());
+
+        $this->assertNull($type->convertToPHPValue(null, $platform));
+        $this->assertNull($type->convertToDatabaseValue(null, $platform));
     }
 
     private function makeType()

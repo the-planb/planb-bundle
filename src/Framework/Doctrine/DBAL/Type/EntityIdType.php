@@ -28,23 +28,20 @@ abstract class EntityIdType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        if ($platform->hasNativeGuidType()) {
-            return $platform->getGuidTypeDeclarationSQL($column);
-        }
-
-        return $platform->getBinaryTypeDeclarationSQL([
-            'length' => '16',
-            'fixed' => true,
-        ]);
+        return $platform->getGuidTypeDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): EntityId
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?EntityId
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         if ($value instanceof EntityId || null === $value) {
             return $value;
         }
 
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             throw ConversionException::conversionFailedInvalidType(
                 $value,
                 $this->getName(),
@@ -73,7 +70,7 @@ abstract class EntityIdType extends Type
             return null;
         }
 
-        if (! is_string($value)) {
+        if (!is_string($value)) {
             throw ConversionException::conversionFailedInvalidType(
                 $value,
                 $this->getName(),
