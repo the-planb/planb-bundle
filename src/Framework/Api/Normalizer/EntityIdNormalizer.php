@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace PlanB\Framework\Api\Normalizer;
 
 use PlanB\Domain\Model\EntityId;
-<<<<<<< Updated upstream
-=======
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
->>>>>>> Stashed changes
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class EntityIdNormalizer implements NormalizerInterface, DenormalizerInterface
@@ -22,8 +19,6 @@ final class EntityIdNormalizer implements NormalizerInterface, DenormalizerInter
     {
         return $data instanceof EntityId;
     }
-<<<<<<< Updated upstream
-=======
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
     {
@@ -44,5 +39,4 @@ final class EntityIdNormalizer implements NormalizerInterface, DenormalizerInter
             EntityId::class => true, // Supports MyCustomClass and result is cacheable
         ];
     }
->>>>>>> Stashed changes
 }

@@ -46,6 +46,15 @@ final class ArrayObjectNormalizerTest extends TestCase
         $this->assertEquals($valueObject, $normalizer->denormalize($input, ArrayValueExample::class));
     }
 
+    public function test_it_supports_types_works_properly()
+    {
+        $normalizer = new ArrayValueNormalizer();
+        $this->assertEquals([
+            '*' => false,
+            ArrayValue::class => true
+        ], $normalizer->getSupportedTypes('format'));
+    }
+
 }
 
 class ArrayValueExample implements ArrayValue

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PlanB\Framework\Api\Normalizer;
 
 use PlanB\Type\ArrayValue;
+use PlanB\Type\BooleanValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -28,5 +29,14 @@ class ArrayValueNormalizer implements NormalizerInterface, DenormalizerInterface
     public function supportsNormalization(mixed $data, string $format = null)
     {
         return $data instanceof ArrayValue;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+//            'object' => null,             // Doesn't support any classes or interfaces
+            '*' => false,                 // Supports any other types, but the result is not cacheable
+            ArrayValue::class => true, // Supports MyCustomClass and result is cacheable
+        ];
     }
 }

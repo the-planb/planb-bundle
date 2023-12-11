@@ -9,7 +9,7 @@ use PlanB\Framework\Api\Normalizer\BooleanValueNormalizer;
 use PlanB\Type\BooleanValue;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class BooleanObjectNormalizerTest extends TestCase
+final class BooleanValueNormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -44,6 +44,15 @@ final class BooleanObjectNormalizerTest extends TestCase
         $normalizer = new BooleanValueNormalizer();
         $this->assertEquals($input, $normalizer->normalize($valueObject));
         $this->assertEquals($valueObject, $normalizer->denormalize($input, BooleanExample::class));
+    }
+
+    public function test_it_supports_types_works_properly()
+    {
+        $normalizer = new BooleanValueNormalizer();
+        $this->assertEquals([
+            '*' => false,
+            BooleanValue::class => true
+        ], $normalizer->getSupportedTypes('format'));
     }
 
 }

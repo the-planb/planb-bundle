@@ -6,6 +6,7 @@ namespace PlanB\Framework\Api\Normalizer;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use PlanB\Type\ArrayValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class CarbonNormalizer implements DenormalizerInterface
@@ -23,4 +24,15 @@ final class CarbonNormalizer implements DenormalizerInterface
     {
         return $type === CarbonImmutable::class || $type === Carbon::class;
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+//            'object' => null,             // Doesn't support any classes or interfaces
+            '*' => false,                 // Supports any other types, but the result is not cacheable
+            CarbonImmutable::class => true, // Supports MyCustomClass and result is cacheable
+        ];
+    }
+
+
 }

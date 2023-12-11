@@ -9,7 +9,7 @@ use PlanB\Framework\Api\Normalizer\IntegerValueNormalizer;
 use PlanB\Type\IntegerValue;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class IntegerObjectNormalizerTest extends TestCase
+final class IntegerValueNormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -46,6 +46,14 @@ final class IntegerObjectNormalizerTest extends TestCase
         $this->assertEquals($valueObject, $normalizer->denormalize($input, IntegerExample::class));
     }
 
+    public function test_it_supports_types_works_properly()
+    {
+        $normalizer = new IntegerValueNormalizer();
+        $this->assertEquals([
+            '*' => false,
+            IntegerValue::class => true
+        ], $normalizer->getSupportedTypes('format'));
+    }
 }
 
 class IntegerExample implements IntegerValue

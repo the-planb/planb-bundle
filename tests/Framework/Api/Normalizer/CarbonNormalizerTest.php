@@ -37,4 +37,13 @@ final class CarbonNormalizerTest extends TestCase
         $this->assertInstanceOf(CarbonImmutable::class, $date);
         $this->assertSame('2012-10-25 17:30:15', $date->format('Y-m-d H:i:s'));
     }
+
+    public function test_it_supports_types_works_properly()
+    {
+        $normalizer = new CarbonNormalizer();
+        $this->assertEquals([
+            '*' => false,
+            CarbonImmutable::class => true
+        ], $normalizer->getSupportedTypes('format'));
+    }
 }
