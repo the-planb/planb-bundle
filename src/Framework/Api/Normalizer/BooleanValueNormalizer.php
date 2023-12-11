@@ -29,4 +29,13 @@ class BooleanValueNormalizer implements NormalizerInterface, DenormalizerInterfa
     {
         return $data instanceof BooleanValue;
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+//            'object' => null,             // Doesn't support any classes or interfaces
+            '*' => false,                 // Supports any other types, but the result is not cacheable
+            BooleanValue::class => true, // Supports MyCustomClass and result is cacheable
+        ];
+    }
 }

@@ -46,6 +46,15 @@ final class FloatObjectNormalizerTest extends TestCase
         $this->assertEquals($valueObject, $normalizer->denormalize($input, FloatExample::class));
     }
 
+    public function test_it_supports_types_works_properly()
+    {
+        $normalizer = new FloatValueNormalizer();
+        $this->assertEquals([
+            '*' => false,
+            FloatValue::class => true
+        ], $normalizer->getSupportedTypes('format'));
+    }
+
 }
 
 class FloatExample implements FloatValue

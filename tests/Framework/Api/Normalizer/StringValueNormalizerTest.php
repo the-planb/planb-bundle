@@ -9,7 +9,7 @@ use PlanB\Framework\Api\Normalizer\StringValueNormalizer;
 use PlanB\Type\StringValue;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class StringObjectNormalizerTest extends TestCase
+final class StringValueNormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -44,6 +44,15 @@ final class StringObjectNormalizerTest extends TestCase
         $normalizer = new StringValueNormalizer();
         $this->assertEquals($input, $normalizer->normalize($valueObject));
         $this->assertEquals($valueObject, $normalizer->denormalize($input, StringExample::class));
+    }
+
+    public function test_it_supports_types_works_properly()
+    {
+        $normalizer = new StringValueNormalizer();
+        $this->assertEquals([
+            '*' => false,
+            StringValue::class => true
+        ], $normalizer->getSupportedTypes('format'));
     }
 
 }

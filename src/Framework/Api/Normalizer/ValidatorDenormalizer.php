@@ -3,6 +3,7 @@
 namespace PlanB\Framework\Api\Normalizer;
 
 use PlanB\DS\Map\Map;
+use PlanB\Type\ArrayValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -51,5 +52,13 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
     public function supportsDenormalization(mixed $data, string $type, string $format = null)
     {
         return $format !== self::FORMAT && $this->validator->hasMetadataFor($type);
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+//            'object' => null,             // Doesn't support any classes or interfaces
+            '*' => false,                 // Supports any other types, but the result is not cacheable
+        ];
     }
 }

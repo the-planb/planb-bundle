@@ -15,7 +15,7 @@ final class EntityIdNormalizerTest extends TestCase
 
     public function test_it_only_supports_entityIds()
     {
-        $normalizer  = new EntityIdNormalizer();
+        $normalizer = new EntityIdNormalizer();
         $badEntityId = $this->prophesize()
             ->reveal();
 
