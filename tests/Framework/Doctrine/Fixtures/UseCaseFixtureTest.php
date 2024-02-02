@@ -23,7 +23,7 @@ class UseCaseFixtureTest extends TestCase
         $command = new \stdClass();
         $fixture = $this->giveMeAFixture()
             ->thatWillCallHandle($command, 10)
-            ->thatWillAddReferences(\stdClass::class, 10)
+            ->thatWillAddReferences(EntityExample::class, 10)
             ->please();
 
         $manager = $this->giveMeAManagerThatExecSql();
@@ -39,6 +39,17 @@ class UseCaseFixtureTest extends TestCase
         $references = $fixture->getSomeReferences(\stdClass::class, 2);
         $this->assertCount(2, $references);
         $this->assertContainsOnlyInstancesOf(\stdClass::class, $references);
+
+    }
+
+    public function testGetOneReference()
+    {
+        $fixture = $this->giveMeAFixture()
+            ->thatHaveReferences(\stdClass::class, 10)
+            ->please();
+
+        $reference = $fixture->getOneReference(\stdClass::class);
+        $this->assertInstanceOf(\stdClass::class, $reference);
 
     }
 
