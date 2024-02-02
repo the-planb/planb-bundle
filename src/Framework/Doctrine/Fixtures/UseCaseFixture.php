@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use League\Tactician\CommandBus;
+use PlanB\Domain\Model\Entity;
 use PlanB\DS\Map\Map;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,10 +24,12 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
     private ObjectManager $manager;
     private ContainerInterface $container;
 
+
     public function __construct(CommandBus $commandBus)
     {
         $this->commandBus = $commandBus;
         $this->faker = Factory::create();
+
     }
 
     public function setContainer(ContainerInterface $container = null): void
@@ -70,14 +73,18 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
         $items = [];
         foreach ($range as $key => $value) {
             $entity = $callback($value, $key);
-            if (is_object($entity)) {
+
+            if ($entity instanceof Entity) {
                 $this->addReference($this->referenceName($entity::class, $key), $entity);
+            }
+            if (!is_null($entity)) {
                 $items[] = $entity;
             }
         }
 
         return $items;
     }
+
 
     protected function referenceName(string $className, int $key): string
     {
@@ -87,18 +94,21 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
     public function getSomeReferences(string $className, int $min, int $max = null): array
     {
         $limit = is_null($max) ? $min : rand($min, $max);
-        $references = $this->referenceRepository->getReferencesByClass()[$className] ?? [];
-
-        $keys = array_keys($references);
-        shuffle($keys);
+        $references = $this->referenceRepository->getReferencesByClass()[$className];
 
         return Map::collect($references)
+            ->shuffle()
             ->keys()
             ->take($limit)
-            ->map(function (string $key) {
-                return $this->getReference($key);
-            })
+            ->map(fn ($key) => $this->getReference($key))
             ->toArray();
+
+    }
+
+    public function getOneReference(string $className): mixed
+    {
+        $list = $this->getSomeReferences($className, 1);
+        return array_pop($list);
     }
 
     protected function loadSqlFile(string $filepath): void
@@ -109,4 +119,5 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
         $this->manager->getConnection()->exec($sql);
         $this->manager->flush();
     }
+
 }

@@ -37,7 +37,7 @@ abstract class EntityIdType extends Type
             return null;
         }
 
-        if ($value instanceof EntityId || null === $value) {
+        if ($value instanceof EntityId) {
             return $value;
         }
 

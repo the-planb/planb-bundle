@@ -4,6 +4,8 @@ namespace PlanB\Tests\Framework\Doctrine\Fixtures;
 
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use League\Tactician\CommandBus;
+use PlanB\Domain\Model\Entity;
+use PlanB\Domain\Model\EntityId;
 use PlanB\Framework\Doctrine\Fixtures\UseCaseFixture;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -31,6 +33,7 @@ final class FixtureBuilder
 
     public function thatWillCallHandle(object $command, int $times): self
     {
+
         $this->commandBus
             ->handle($command)
             ->shouldBeCalledTimes($times);
@@ -112,6 +115,17 @@ final class FixtureBuilder
     }
 }
 
+class EntityExample implements Entity
+{
+
+    public function getId(): EntityId
+    {
+        $id = new class extends EntityId {
+        };
+        return $id;
+    }
+}
+
 class FixtureExample extends UseCaseFixture
 {
 
@@ -120,11 +134,23 @@ class FixtureExample extends UseCaseFixture
         $this->createMany(10, function () {
             $this->handle(new \stdClass());
 
-            return new \stdClass();
+            return new EntityExample();
         });
 
         $this->loadSqlFile(__DIR__ . '/data/data.sql');
     }
+
+    public function loadRandomData(): void
+    {
+        $this->createRandomRange(10, function () {
+            $this->handle(new \stdClass());
+
+            return new EntityExample();
+        });
+    }
+
+
+
 
 //    public function getReference($name, ?string $class = null)
 //    {
