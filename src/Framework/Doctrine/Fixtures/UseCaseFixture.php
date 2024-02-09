@@ -54,7 +54,7 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
 
     abstract public function loadData(): void;
 
-    abstract protected function allowedEnvironments(): array;
+    abstract public function allowedEnvironments(): array;
 
     public function handle(object $command): mixed
     {
