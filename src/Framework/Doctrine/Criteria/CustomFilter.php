@@ -26,9 +26,12 @@ abstract class CustomFilter
         return $expr->eq($field, $value);
     }
 
-    public function apply(Expr $expr, Filter $filter, string $alias): ?string
+    public function apply(Expr $expr, Filter $filter, string $alias = null): ?string
     {
-        $field = "$alias.{$filter->getField()}";
+        $field = is_null($alias) ?
+            $filter->getField() :
+            "$alias.{$filter->getField()}";
+
         $operator = $filter->getOperator();
         $value = $filter->getValue();
 

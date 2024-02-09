@@ -149,15 +149,7 @@ class FixtureExample extends UseCaseFixture
         });
     }
 
-
-
-
-//    public function getReference($name, ?string $class = null)
-//    {
-//        return $this->referenceRepository->getReference($name, $class);
-//    }
-
-    protected function allowedEnvironments(): array
+    public function allowedEnvironments(): array
     {
         return ['dev'];
     }

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace PlanB\Domain\Model;
 
 use PlanB\DS\Attribute\ElementType;
-use PlanB\DS\Sequence\Sequence;
+use PlanB\DS\Vector\Vector;
 
+/**
+ * @extends Vector<int, Entity::class|array>
+ */
 #[ElementType(Entity::class, 'array')]
-abstract class EntityListInput extends Sequence
+abstract class EntityListInput extends Vector
 {
     private mixed $creator = null;
     private mixed $remover = null;
@@ -58,7 +61,7 @@ abstract class EntityListInput extends Sequence
             return [];
         }
 
-        $current = Sequence::collect($data);
+        $current = Vector::collect($data);
         $candidates = $this->filter(fn (mixed $item) => $item instanceof Entity);
 
         return $current->diff($candidates, function (Entity $first, Entity $second) {
