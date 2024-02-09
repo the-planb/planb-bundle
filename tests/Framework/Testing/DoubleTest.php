@@ -3,7 +3,7 @@
 namespace PlanB\Tests\Framework\Testing;
 
 use PHPUnit\Framework\TestCase;
-use PlanB\DS\Sequence\Sequence;
+use PlanB\DS\Vector\Vector;
 use PlanB\Framework\Testing\Double;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -18,18 +18,17 @@ class DoubleTest extends TestCase
             $builder->withCount(111);
         });
 
-        $sequence = $builder->reveal();
-        $this->assertEquals(111, $sequence->count());
-        $this->assertEquals(111, $sequence->filter()->count());
-
-
+        $vector = $builder->reveal();
+        $this->assertEquals(111, $vector->count());
+        $this->assertEquals(111, $vector->filter()->count());
+        
     }
 }
 
 class DoubleBuilder extends Double
 {
 
-    public function reveal(): Sequence
+    public function reveal(): Vector
     {
         return $this->double()
             ->reveal();
@@ -46,7 +45,7 @@ class DoubleBuilder extends Double
 
     protected function classNameOrInterface(): string
     {
-        return Sequence::class;
+        return Vector::class;
     }
 
     protected function double(): ObjectProphecy|\DateTime
