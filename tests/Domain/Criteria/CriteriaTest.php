@@ -5,10 +5,27 @@ namespace PlanB\Tests\Domain\Criteria;
 use PHPUnit\Framework\TestCase;
 use PlanB\Domain\Criteria\Criteria;
 use PlanB\Domain\Criteria\Operator;
+use PlanB\Domain\Criteria\Order;
 use PlanB\Domain\Criteria\OrderDir;
 
 class CriteriaTest extends TestCase
 {
+    public function test_it_manage_empty_data_properly()
+    {
+        $criteria = Criteria::empty();
+
+        $order = $criteria->getOrder();
+        $this->assertEquals(Order::empty(), $order);
+
+        $pagination = $criteria->getPagination();
+        $this->assertEquals(10, $pagination->getMaxResults());
+        $this->assertEquals(1, $pagination->getCurrentPage());
+        $this->assertEquals(0, $pagination->getFirstResult());
+
+        $filters = $criteria->getFilters();
+        $this->assertEmpty($filters);
+    }
+
     public function test_it_manage_data_properly()
     {
         $criteria = Criteria::fromValues([

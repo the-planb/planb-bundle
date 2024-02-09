@@ -15,6 +15,11 @@ final class Criteria
         $this->pagination = new Pagination($page, $itemsPerPage);
     }
 
+    public static function empty(): self
+    {
+        return self::fromValues([]);
+    }
+
     public static function fromValues(array $values): self
     {
 
