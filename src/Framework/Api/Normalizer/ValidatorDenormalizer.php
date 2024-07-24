@@ -3,7 +3,6 @@
 namespace PlanB\Framework\Api\Normalizer;
 
 use PlanB\DS\Map\Map;
-use PlanB\Type\ArrayValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -38,6 +37,10 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
             $constraints[$name] = Map::collect($member)
                 ->flatMap(fn (PropertyMetadata $metadata) => $metadata->constraints)
                 ->toArray();
+        }
+
+        if (empty($constraints)) {
+            return $this->denormalizer->denormalize($data, $type, self::FORMAT, $context);
         }
 
         $violations = $this->validator->validate($data, new Collection($constraints));
