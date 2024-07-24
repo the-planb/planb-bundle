@@ -2,13 +2,12 @@
 
 namespace PlanB\Framework\Api\Normalizer;
 
+use ApiPlatform\Validator\Exception\ValidationException;
 use PlanB\DS\Map\Map;
-use PlanB\Type\ArrayValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -27,6 +26,10 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
     {
+        $operation = isset($context['operation']) ?
+            $context['operation']->getInput() : [];
+
+        $type = $operation['class'] ?? $type;
         $classMetaData = $this->validator->getMetadataFor($type);
 
         if (!isset($classMetaData->members)) {
@@ -36,14 +39,17 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
         $constraints = [];
         foreach ($classMetaData->members as $name => $member) {
             $constraints[$name] = Map::collect($member)
-                ->flatMap(fn (PropertyMetadata $metadata) => $metadata->constraints)
+                ->flatMap(fn(PropertyMetadata $metadata) => $metadata->constraints)
                 ->toArray();
         }
 
-        $violations = $this->validator->validate($data, new Collection($constraints));
+        if (empty($constraints)) {
+            return $this->denormalizer->denormalize($data, $type, self::FORMAT, $context);
+        }
 
+        $violations = $this->validator->validate($data, new Collection($constraints));
         if ($violations->count() > 0) {
-            throw new ValidationFailedException($data, $violations);
+            throw new ValidationException($violations);
         }
 
         return $this->denormalizer->denormalize($data, $type, self::FORMAT, $context);
