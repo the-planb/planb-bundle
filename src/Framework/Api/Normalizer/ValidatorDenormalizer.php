@@ -3,7 +3,6 @@
 namespace PlanB\Framework\Api\Normalizer;
 
 use PlanB\DS\Map\Map;
-use PlanB\Type\ArrayValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -27,6 +26,10 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
     {
+        $operation = isset($context['operation']) ?
+            $context['operation']->getInput() : [];
+
+        $type = $operation['class'] ?? $type;
         $classMetaData = $this->validator->getMetadataFor($type);
 
         if (!isset($classMetaData->members)) {
@@ -40,8 +43,11 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
                 ->toArray();
         }
 
-        $violations = $this->validator->validate($data, new Collection($constraints));
+        if (empty($constraints)) {
+            return $this->denormalizer->denormalize($data, $type, self::FORMAT, $context);
+        }
 
+        $violations = $this->validator->validate($data, new Collection($constraints));
         if ($violations->count() > 0) {
             throw new ValidationFailedException($data, $violations);
         }
