@@ -3,6 +3,7 @@
 namespace PlanB\Tests\Framework\Doctrine\Fixtures;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class UseCaseFixtureTest extends TestCase
 {
@@ -18,6 +19,30 @@ class UseCaseFixtureTest extends TestCase
         $fixture->handle($command);
     }
 
+    public function testDenormalize()
+    {
+
+        $fixture = $this->giveMeAFixture()
+            ->thatWillDenormalizeAnArray(stdClass::class, new stdClass(), 1)
+            ->please();
+
+        $response = $fixture->denormalize([], stdClass::class);
+
+        $this->assertEquals($response, new stdClass());
+    }
+
+    public function testIriConverter()
+    {
+
+        $fixture = $this->giveMeAFixture()
+            ->thatWillConvertResourceToIri(new stdClass(), '/esto/es/un/iri', 1)
+            ->please();
+
+        $response = $fixture->resourceToIri(new stdClass());
+
+        $this->assertEquals($response, '/esto/es/un/iri');
+    }
+
     public function testLoadData()
     {
         $command = new \stdClass();
@@ -30,16 +55,27 @@ class UseCaseFixtureTest extends TestCase
         $fixture->load($manager);
     }
 
-    public function testGetSomeReferences()
+    public function testGetManyReferences()
     {
         $fixture = $this->giveMeAFixture()
             ->thatHaveReferences(\stdClass::class, 10)
             ->please();
 
-        $references = $fixture->getSomeReferences(\stdClass::class, 2);
+        $references = $fixture->getManyReferences(\stdClass::class, 2);
         $this->assertCount(2, $references);
         $this->assertContainsOnlyInstancesOf(\stdClass::class, $references);
+    }
 
+    public function testGetManyReferencesLikeIri()
+    {
+        $fixture = $this->giveMeAFixture()
+            ->thatWillConvertResourceToIri(new stdClass(), '/esto/es/un/iri', 2)
+            ->thatHaveReferences(\stdClass::class, 2)
+            ->please();
+
+        $references = $fixture->getManyReferencesLikeIri(\stdClass::class, 2);
+        $this->assertCount(2, $references);
+        $this->assertContainsOnly('string', $references);
     }
 
     public function testGetOneReference()
@@ -50,7 +86,17 @@ class UseCaseFixtureTest extends TestCase
 
         $reference = $fixture->getOneReference(\stdClass::class);
         $this->assertInstanceOf(\stdClass::class, $reference);
+    }
 
+    public function testGetOneReferenceLikeIri()
+    {
+        $fixture = $this->giveMeAFixture()
+            ->thatWillConvertResourceToIri(new stdClass(), '/esto/es/un/iri', 1)
+            ->thatHaveReferences(\stdClass::class, 10)
+            ->please();
+
+        $reference = $fixture->getOneReferenceLikeIri(\stdClass::class);
+        $this->assertEquals('/esto/es/un/iri', $reference);
     }
 
     public function testLoadDataWithInvalidEnv()

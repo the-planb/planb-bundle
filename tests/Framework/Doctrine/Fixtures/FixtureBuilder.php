@@ -2,6 +2,7 @@
 
 namespace PlanB\Tests\Framework\Doctrine\Fixtures;
 
+use ApiPlatform\Api\IriConverterInterface;
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use League\Tactician\CommandBus;
 use PlanB\Domain\Model\Entity;
@@ -9,15 +10,19 @@ use PlanB\Domain\Model\EntityId;
 use PlanB\Framework\Doctrine\Fixtures\UseCaseFixture;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use stdClass;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class FixtureBuilder
 {
 
     private string $env;
     private CommandBus|ObjectProphecy $commandBus;
+    private DenormalizerInterface|ObjectProphecy $denormalizer;
     private ReferenceRepository|ObjectProphecy $referenceRepository;
+    private IriConverterInterface|ObjectProphecy $iriConverter;
 
     private $prophesize;
 
@@ -28,18 +33,41 @@ final class FixtureBuilder
         $this->prophesize = $prophesize;
 
         $this->commandBus = ($this->prophesize)(CommandBus::class);
+        $this->denormalizer = ($this->prophesize)(DenormalizerInterface::class);
+        $this->iriConverter = ($this->prophesize)(IriConverterInterface::class);
+
         $this->referenceRepository = ($this->prophesize)(ReferenceRepository::class);
     }
 
     public function thatWillCallHandle(object $command, int $times): self
     {
-
         $this->commandBus
             ->handle($command)
             ->shouldBeCalledTimes($times);
 
         return $this;
     }
+
+    public function thatWillDenormalizeAnArray(string $type, object $response, int $times): self
+    {
+        $this->denormalizer
+            ->denormalize(Argument::type('array'), $type, Argument::cetera())
+            ->willReturn($response)
+            ->shouldBeCalledTimes($times);
+
+        return $this;
+    }
+
+    public function thatWillConvertResourceToIri(object $input, string $response, int $times): self
+    {
+        $this->iriConverter
+            ->getIriFromResource(Argument::type(type_of($input)), Argument::cetera())
+            ->willReturn($response)
+            ->shouldBeCalledTimes($times);
+
+        return $this;
+    }
+
 
     public function thatWillNeverHandle(): self
     {
@@ -107,7 +135,7 @@ final class FixtureBuilder
             ->get('kernel')
             ->willReturn($kernel);
 
-        $fixture = new FixtureExample($this->commandBus->reveal());
+        $fixture = new FixtureExample($this->commandBus->reveal(), $this->denormalizer->reveal(), $this->iriConverter->reveal());
         $fixture->setContainer($container->reveal());
         $fixture->setReferenceRepository($this->referenceRepository->reveal());
 
@@ -132,7 +160,7 @@ class FixtureExample extends UseCaseFixture
     public function loadData(): void
     {
         $this->createMany(10, function () {
-            $this->handle(new \stdClass());
+            $this->handle(new stdClass());
 
             return new EntityExample();
         });
