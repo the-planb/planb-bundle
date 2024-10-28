@@ -13,18 +13,18 @@ final class EntityNormalizer implements DenormalizerInterface, DenormalizerAware
 {
     use DenormalizerAwareTrait;
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         return $this->denormalizer->denormalize($data['@id'], $type, $format, $context);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
 
         return is_array($data) and isset($data['@id']);
     }
 
-    public function getSupportedTypes(): array
+    public function getSupportedTypes(?string $format): array
     {
         return [
             Entity::class => true, // Supports AuthorListInput and result is cacheable

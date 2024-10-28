@@ -24,7 +24,7 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
         $this->validator = $validator;
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         $operation = isset($context['operation']) ?
             $context['operation']->getInput() : [];
@@ -55,7 +55,7 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
         return $this->denormalizer->denormalize($data, $type, self::FORMAT, $context);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         return $format !== self::FORMAT && $this->validator->hasMetadataFor($type);
     }

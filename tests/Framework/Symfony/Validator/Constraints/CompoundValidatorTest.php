@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PlanB\Tests\Framework\Symfony\Validator\Constraints;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PlanB\Framework\Symfony\Validator\Constraints\Compound;
 use PlanB\Framework\Symfony\Validator\Constraints\CompoundValidator;
@@ -14,9 +15,8 @@ use Symfony\Component\Validator\Validation;
 
 final class CompoundValidatorTest extends TestCase
 {
-    /**
-     * @dataProvider valuesProvider
-     */
+
+    #[DataProvider('valuesProvider')]
     public function test_it_validates_if_a_value_object_is_passed(mixed $value, int $violationsCount)
     {
         $validator = Validation::createValidator();
@@ -25,7 +25,7 @@ final class CompoundValidatorTest extends TestCase
         $this->assertSame($violationsCount, $violations->count());
     }
 
-    public function valuesProvider()
+    public static function valuesProvider(): array
     {
         return [
             [12, 1],
