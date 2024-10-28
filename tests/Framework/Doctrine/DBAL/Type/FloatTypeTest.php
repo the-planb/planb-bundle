@@ -6,6 +6,7 @@ namespace PlanB\Tests\Framework\Doctrine\DBAL\Type;
 
 use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\DBAL\Types\ConversionException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PlanB\Framework\Doctrine\DBAL\Type\FloatType;
 use PlanB\Type\FloatValue;
@@ -39,9 +40,8 @@ final class FloatTypeTest extends TestCase
         $this->assertSame('FloatExample', $type->getName());
     }
 
-    /**
-     * @dataProvider toPhpValues
-     */
+
+    #[DataProvider('toPhpValues')]
     public function test_it_converts_to_php_value_properly($value, $instance)
     {
         $platform = new MySQL80Platform();
@@ -50,7 +50,7 @@ final class FloatTypeTest extends TestCase
         $this->assertEquals($instance, $type->convertToPHPValue($value, $platform));
     }
 
-    public function toPhpValues()
+    public static function toPhpValues(): array
     {
         return [
             [10.1, new FloatExample(10.1)],
@@ -75,9 +75,7 @@ final class FloatTypeTest extends TestCase
         $this->assertNull($type->convertToDatabaseValue(null, $platform));
     }
 
-    /**
-     * @dataProvider badValues
-     */
+    #[DataProvider('badValues')]
     public function test_it_throws_an_exception_when_try_to_convert_an_invalid_value_to_php_value($value)
     {
         $platform = new MySQL80Platform();
@@ -87,9 +85,7 @@ final class FloatTypeTest extends TestCase
         $type->convertToDatabaseValue($value, $platform);
     }
 
-    /**
-     * @dataProvider badValues
-     */
+    #[DataProvider('badValues')]
     public function test_it_throws_an_exception_when_try_to_convert_an_invalid_value_to_database_value($value)
     {
         $platform = new MySQL80Platform();
@@ -99,7 +95,7 @@ final class FloatTypeTest extends TestCase
         $type->convertToPHPValue($value, $platform);
     }
 
-    public function badValues(): array
+    public static function badValues(): array
     {
         return [
             [new \stdClass()],

@@ -99,14 +99,4 @@ class UseCaseFixtureTest extends TestCase
         $this->assertEquals('/esto/es/un/iri', $reference);
     }
 
-    public function testLoadDataWithInvalidEnv()
-    {
-        $fixture = $this->giveMeAFixture()
-            ->withEnvironment('test')
-            ->thatWillNeverHandle()
-            ->please();
-
-        $manager = $this->giveMeAManagerThatNeverExecSql();
-        $fixture->load($manager);
-    }
 }

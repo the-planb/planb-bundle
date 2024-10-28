@@ -6,12 +6,11 @@ namespace PlanB\Framework\Api\Normalizer;
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use PlanB\Type\ArrayValue;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class CarbonNormalizer implements DenormalizerInterface
 {
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         if ($type === CarbonImmutable::class) {
             return CarbonImmutable::make($data);
@@ -20,7 +19,7 @@ final class CarbonNormalizer implements DenormalizerInterface
         return Carbon::make($data);
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         return $type === CarbonImmutable::class || $type === Carbon::class;
     }

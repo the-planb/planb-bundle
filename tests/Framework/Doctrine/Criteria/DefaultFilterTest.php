@@ -3,6 +3,7 @@
 namespace PlanB\Tests\Framework\Doctrine\Criteria;
 
 use Doctrine\ORM\Query\Expr;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PlanB\Domain\Criteria\Filter;
 use PlanB\Domain\Criteria\Operator;
@@ -13,9 +14,7 @@ class DefaultFilterTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function test_it_applies_a_filter_properly(Filter $filter, string $expected)
     {
         $expr = new Expr();
@@ -25,7 +24,7 @@ class DefaultFilterTest extends TestCase
         $this->assertEquals($expected, $sentence);
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [new Filter('name', Operator::EQUALS, 'value'), "LOWER(A.name) = 'value'"],
@@ -43,9 +42,7 @@ class DefaultFilterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderEmptyAlias
-     */
+    #[DataProvider('dataProviderEmptyAlias')]
     public function test_it_applies_a_filter_without_alias_properly(Filter $filter, string $expected)
     {
         $expr = new Expr();
@@ -55,7 +52,7 @@ class DefaultFilterTest extends TestCase
         $this->assertEquals($expected, $sentence);
     }
 
-    public function dataProviderEmptyAlias()
+    public static function dataProviderEmptyAlias(): array
     {
         return [
             [new Filter('name', Operator::EQUALS, 'value'), "LOWER(name) = 'value'"],

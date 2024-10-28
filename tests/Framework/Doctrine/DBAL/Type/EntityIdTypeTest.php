@@ -7,6 +7,7 @@ namespace PlanB\Tests\Framework\Doctrine\DBAL\Type;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PlanB\Domain\Model\EntityId;
 use PlanB\Framework\Doctrine\DBAL\Type\EntityIdType;
@@ -47,9 +48,7 @@ final class EntityIdTypeTest extends TestCase
         $this->assertSame('UUID', $type->getSQLDeclaration([], $platform));
     }
 
-    /**
-     * @dataProvider valuesProvider
-     */
+    #[DataProvider('valuesProvider')]
     public function test_it_converts_to_php_value_properly($ulid)
     {
         $platform = new MySQL80Platform();
@@ -59,7 +58,7 @@ final class EntityIdTypeTest extends TestCase
         $this->assertNull($type->convertToPHPValue(null, $platform));
     }
 
-    /** @dataProvider badValuesProvider */
+    #[DataProvider('badValuesProvider')]
     public function test_it_throws_an_exception_when_try_to_convert_an_invalid_value($ulid)
     {
         $platform = new MySQL80Platform();
@@ -69,9 +68,7 @@ final class EntityIdTypeTest extends TestCase
         $type->convertToPHPValue($ulid, $platform);
     }
 
-    /**
-     * @dataProvider toDatabaseProvider
-     */
+    #[DataProvider('toDatabaseProvider')]
     public function test_it_converts_to_database_value_properly($entityId, $expected)
     {
         $platform = new MySQL80Platform();
@@ -81,8 +78,7 @@ final class EntityIdTypeTest extends TestCase
         $this->assertTrue($type->requiresSQLCommentHint($platform));
     }
 
-
-    /** @dataProvider badToDatabaseProvider */
+    #[DataProvider('badToDatabaseProvider')]
     public function test_it_throws_an_exception_when_try_to_convert_an_invalid_entityId($badEntityId)
     {
         $platform = new MySQL80Platform();
@@ -92,7 +88,7 @@ final class EntityIdTypeTest extends TestCase
         $type->convertToDatabaseValue($badEntityId, $platform);
     }
 
-    public function badValuesProvider()
+    public static function badValuesProvider()
     {
         return [
             ['bad-ulid'],
@@ -100,7 +96,7 @@ final class EntityIdTypeTest extends TestCase
         ];
     }
 
-    public function valuesProvider()
+    public static function valuesProvider(): array
     {
         $ulid = (string)(new Ulid());
 
@@ -110,7 +106,7 @@ final class EntityIdTypeTest extends TestCase
         ];
     }
 
-    public function toDatabaseProvider()
+    public static function toDatabaseProvider()
     {
         $ulid = new Ulid();
         $entityId = new MyEntityId((string)$ulid);
@@ -122,7 +118,7 @@ final class EntityIdTypeTest extends TestCase
         ];
     }
 
-    public function badToDatabaseProvider()
+    public static function badToDatabaseProvider()
     {
         return [
             [new \stdClass()],

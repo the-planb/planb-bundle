@@ -6,9 +6,9 @@ namespace App\BookStore\Framework\Doctrine\Fixtures;
 
 namespace PlanB\Framework\Doctrine\Fixtures;
 
-use ApiPlatform\Api\IriConverterInterface;
-use ApiPlatform\Api\UrlGeneratorInterface;
+use ApiPlatform\Metadata\IriConverterInterface;
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\UrlGeneratorInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -17,17 +17,13 @@ use League\Tactician\CommandBus;
 use PlanB\Domain\Model\Entity;
 use PlanB\DS\Map\Map;
 use PlanB\DS\Vector\Vector;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
+abstract class UseCaseFixture extends Fixture
 {
     protected Generator $faker;
     private CommandBus $commandBus;
     private ObjectManager $manager;
-    private ContainerInterface $container;
     private DenormalizerInterface $denormalizer;
     private IriConverterInterface $iriConverter;
 
@@ -40,29 +36,13 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
         $this->iriConverter = $iriConverter;
     }
 
-    public function setContainer(ContainerInterface $container = null): void
-    {
-        $this->container = $container;
-    }
-
     final public function load(ObjectManager $manager): void
     {
-        /** @var KernelInterface $kernel */
-        $kernel = $this->container->get('kernel');
-        $env = $kernel->getEnvironment();
-
-
         $this->manager = $manager;
-        if (!in_array($env, $this->allowedEnvironments())) {
-            return;
-        }
-
         $this->loadData();
     }
 
     abstract public function loadData(): void;
-
-    abstract public function allowedEnvironments(): array;
 
     public function handle(object $command): mixed
     {
@@ -118,7 +98,7 @@ abstract class UseCaseFixture extends Fixture implements ContainerAwareInterface
             ->shuffle()
             ->keys()
             ->take($limit)
-            ->map(fn ($key) => $this->getReference($key));
+            ->map(fn ($key) => $this->getReference($key, $className));
     }
 
     public function getManyReferences(string $className, int $min, int $max = null): array

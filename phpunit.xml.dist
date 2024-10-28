@@ -6,7 +6,10 @@
          backupGlobals="false"
          colors="true"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         stopOnFailure="true"
          testdox="true"
 >
     <php>
@@ -21,14 +24,19 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
         <exclude>
             <directory>src/Bundle</directory>
             <file>src/Framework/Api/Normalizer/ValidatorDenormalizer.php</file>
+            <file>src/Framework/Api/State/Processor/AddHeadersProcessor.php</file>
         </exclude>
+    </source>
+
+    <coverage>
+
         <report>
             <clover outputFile="build/reports/coverage.xml"/>
             <html outputDirectory="build/reports/coverage"/>
@@ -36,7 +44,7 @@
     </coverage>
 
     <extensions>
-        <extension class="PlanB\Testing\PhpUnit\Hook\BypassFinalHook"/>
+        <bootstrap class="DG\BypassFinals\PHPUnitExtension"/>
     </extensions>
 
     <logging>

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\DBAL\Types\ConversionException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PlanB\Framework\Doctrine\DBAL\Type\CarbonDateImmutableType;
 use PlanB\Framework\Doctrine\DBAL\Type\CarbonDateTimeImmutableType;
@@ -22,9 +23,7 @@ final class CarbonTypesTest extends TestCase
     use ProphecyTrait;
 
 
-    /**
-     * @dataProvider CarbonTypeProvider
-     */
+    #[DataProvider('CarbonTypeProvider')]
     public function test_it_converts_to_php_value_properly($name, $type, $expected, $good, $bad)
     {
         $platform = new MySQL80Platform();
@@ -40,7 +39,7 @@ final class CarbonTypesTest extends TestCase
         $type->convertToPHPValue($bad, $platform);
     }
 
-    public function CarbonTypeProvider()
+    public static function CarbonTypeProvider(): array
     {
         $time = '12:12:12';
         $date = '2012-03-01';

@@ -9,7 +9,7 @@ use PlanB\Framework\Api\Normalizer\ArrayValueNormalizer;
 use PlanB\Type\ArrayValue;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class ArrayObjectNormalizerTest extends TestCase
+final class ArrayValueNormalizerTest extends TestCase
 {
     use ProphecyTrait;
 
