@@ -2,7 +2,7 @@
 
 namespace PlanB\Tests\Framework\Doctrine\Fixtures;
 
-use ApiPlatform\Api\IriConverterInterface;
+use ApiPlatform\Metadata\IriConverterInterface;
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use League\Tactician\CommandBus;
 use PlanB\Domain\Model\Entity;
@@ -11,14 +11,11 @@ use PlanB\Framework\Doctrine\Fixtures\UseCaseFixture;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class FixtureBuilder
 {
 
-    private string $env;
     private CommandBus|ObjectProphecy $commandBus;
     private DenormalizerInterface|ObjectProphecy $denormalizer;
     private ReferenceRepository|ObjectProphecy $referenceRepository;
@@ -29,7 +26,6 @@ final class FixtureBuilder
 
     public function __construct(callable $prophesize)
     {
-        $this->env = 'dev';
         $this->prophesize = $prophesize;
 
         $this->commandBus = ($this->prophesize)(CommandBus::class);
@@ -126,17 +122,8 @@ final class FixtureBuilder
 
     public function please(): UseCaseFixture
     {
-        $container = ($this->prophesize)(ContainerInterface::class);
-        $kernel = ($this->prophesize)(Kernel::class);
-        $kernel->getEnvironment()
-            ->willReturn($this->env);
-
-        $container
-            ->get('kernel')
-            ->willReturn($kernel);
 
         $fixture = new FixtureExample($this->commandBus->reveal(), $this->denormalizer->reveal(), $this->iriConverter->reveal());
-        $fixture->setContainer($container->reveal());
         $fixture->setReferenceRepository($this->referenceRepository->reveal());
 
         return $fixture;

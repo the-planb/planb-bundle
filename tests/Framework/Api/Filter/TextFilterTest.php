@@ -2,6 +2,8 @@
 
 namespace PlanB\Tests\Framework\Api\Filter;
 
+use ApiPlatform\Metadata\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PlanB\Tests\Framework\Api\Filter\Traits\FilterTrait;
 
@@ -9,9 +11,7 @@ class TextFilterTest extends TestCase
 {
     use FilterTrait;
 
-    /**
-     * @dataProvider fiterPropertyProvider
-     */
+    #[DataProvider('fiterPropertyProvider')]
     public function testFilterProperty(string $strategy, string $value, string $expected)
     {
         $queryBuilder = $this->giveMeAQueryBuilderThatAddWhere($expected);
@@ -28,7 +28,27 @@ class TextFilterTest extends TestCase
         ]);
     }
 
-    public function fiterPropertyProvider()
+
+    public function testThrowsAnExceptionOnInvalidStrategy()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('strategy bad-strategy does not exist.');
+
+        $queryBuilder = $this->giveMeAQueryBuilder();
+        $queryNameGenerator = $this->giveMeANameGenerator();
+
+        $textFilter = $this->giveMeATextFilter()
+            ->withPropertyNames(['uno'])
+            ->please();
+
+        $textFilter->apply($queryBuilder, $queryNameGenerator, 'resourceClass', null, [
+            'filters' => [
+                'uno' => ['bad-strategy' => 'any-value'],
+            ]
+        ]);
+    }
+
+    public static function fiterPropertyProvider(): array
     {
         return [
             ['exact', 'hola', "LOWER(A.uno) LIKE 'hola'"],
@@ -38,9 +58,7 @@ class TextFilterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider fiterPropertyProvider
-     */
+    #[DataProvider('fiterPropertyProvider')]
     public function testFilterDisabledProperty(string $strategy, string $value)
     {
         $queryBuilder = $this->giveMeAQueryBuilderThatNeverChange();
@@ -57,9 +75,7 @@ class TextFilterTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider fiterPropertyProvider
-     */
+    #[DataProvider('fiterPropertyProvider')]
     public function testFilterMissingProperty(string $strategy, string $value)
     {
         $queryBuilder = $this->giveMeAQueryBuilderThatNeverChange();
@@ -76,6 +92,7 @@ class TextFilterTest extends TestCase
         ]);
 
     }
+
 
     public function testDescription()
     {

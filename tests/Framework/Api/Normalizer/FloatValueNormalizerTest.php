@@ -9,7 +9,7 @@ use PlanB\Framework\Api\Normalizer\FloatValueNormalizer;
 use PlanB\Type\FloatValue;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-final class FloatObjectNormalizerTest extends TestCase
+final class FloatValueNormalizerTest extends TestCase
 {
     use ProphecyTrait;
 

@@ -22,7 +22,7 @@ abstract class EnumType extends ValueObjectType
             return $value;
         }
 
-        if ($value instanceof UnitEnum) {
+        if ($value instanceof BackedEnum) {
             return $value->value;
         }
 
@@ -40,7 +40,7 @@ abstract class EnumType extends ValueObjectType
      * @param mixed $value The value to convert.
      * @param AbstractPlatform $platform The currently used database platform.
      *
-     * @return mixed The PHP representation of the value.
+     * @return ?BackedEnum The PHP representation of the value.
      *
      * @throws ConversionException
      */

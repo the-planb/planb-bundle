@@ -19,6 +19,20 @@ trait FilterTrait
     /**
      * @return QueryBuilder|\Prophecy\Prophecy\ObjectProphecy
      */
+    private function giveMeAQueryBuilder(): QueryBuilder
+    {
+        $queryBuilder = $this->prophesize(QueryBuilder::class);
+
+        $queryBuilder
+            ->getRootAliases()
+            ->willReturn(['A']);
+
+        return $queryBuilder->reveal();
+    }
+
+    /**
+     * @return QueryBuilder|\Prophecy\Prophecy\ObjectProphecy
+     */
     private function giveMeAQueryBuilderThatAddWhere($code): QueryBuilder
     {
         $queryBuilder = $this->prophesize(QueryBuilder::class);
