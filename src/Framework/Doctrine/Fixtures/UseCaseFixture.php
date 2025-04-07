@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace App\BookStore\Framework\Doctrine\Fixtures;
-
 namespace PlanB\Framework\Doctrine\Fixtures;
 
 use ApiPlatform\Metadata\IriConverterInterface;
@@ -14,7 +12,6 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use League\Tactician\CommandBus;
-use PlanB\Domain\Model\Entity;
 use PlanB\DS\Map\Map;
 use PlanB\DS\Vector\Vector;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -72,9 +69,8 @@ abstract class UseCaseFixture extends Fixture
         foreach ($range as $key => $value) {
             $entity = $callback($value, $key);
 
-            if ($entity instanceof Entity) {
-                $this->addReference($this->referenceName($entity::class, $key), $entity);
-            }
+            $this->addReference($this->referenceName($entity::class, $key), $entity);
+
             if (!is_null($entity)) {
                 $items[] = $entity;
             }
