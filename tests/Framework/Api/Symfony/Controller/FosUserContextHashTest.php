@@ -54,7 +54,7 @@ class FosUserContextHashTest extends TestCase
         $controller = $this->giveMeAController()
             ->withAuthenticatedUser([
                 'ROLE_EDITOR',
-                'ROLE_ADMIN'
+                'ROLE_ADMIN',
             ])
             ->please();
 

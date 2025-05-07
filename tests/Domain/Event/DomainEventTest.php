@@ -27,5 +27,4 @@ final class DomainEventTest extends TestCase
 
 class MyDomainEvent extends DomainEvent
 {
-
 }

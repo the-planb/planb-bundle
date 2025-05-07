@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Tests\Domain\Input;
@@ -34,8 +35,7 @@ class InputTest extends TestCase
 
     private function createInput(array $data): Input
     {
-        return new class($data) extends Input {
-
+        return new class ($data) extends Input {
             public string $name;
             public string $lastName;
 

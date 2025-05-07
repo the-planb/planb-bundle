@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\Serializer;
 
 final class CarbonNormalizerTest extends TestCase
 {
-
     public function test_it_can_denormalize_an_instance_of_carbon()
     {
 
@@ -43,7 +42,7 @@ final class CarbonNormalizerTest extends TestCase
         $normalizer = new CarbonNormalizer();
         $this->assertEquals([
             '*' => false,
-            CarbonImmutable::class => true
+            CarbonImmutable::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 }

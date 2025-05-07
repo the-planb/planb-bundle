@@ -20,7 +20,7 @@ final class EntityIdNormalizer implements NormalizerInterface, DenormalizerInter
         return is_subclass_of($type, EntityId::class);
     }
 
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    public function normalize(mixed $object, ?string $format = null, array $context = []): string
     {
         return (string)$object;
     }

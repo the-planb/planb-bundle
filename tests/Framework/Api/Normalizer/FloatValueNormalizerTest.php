@@ -51,7 +51,7 @@ final class FloatValueNormalizerTest extends TestCase
         $normalizer = new FloatValueNormalizer();
         $this->assertEquals([
             '*' => false,
-            FloatValue::class => true
+            FloatValue::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 
@@ -59,7 +59,6 @@ final class FloatValueNormalizerTest extends TestCase
 
 class FloatExample implements FloatValue
 {
-
     private float $value;
 
     public function __construct(float $value)

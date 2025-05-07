@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Tests\Domain\Input;
@@ -26,7 +27,7 @@ class InputListTest extends TestCase
         $data = [
             $this->createEntity(),
             $this->createEntity(),
-            $this->createEntity()
+            $this->createEntity(),
         ];
 
         $this->setUpInputList($data, $data, $client);
@@ -44,11 +45,11 @@ class InputListTest extends TestCase
         $entityC = $this->createEntity();
 
         $this->setUpInputList([
-            $entityA
+            $entityA,
         ], [
             $entityA,
             $entityB,
-            $entityC
+            $entityC,
         ], $client);
     }
 
@@ -60,12 +61,14 @@ class InputListTest extends TestCase
         });
 
         $entityA = $this->createEntity();
-        $entityB = $this->createInputArray();;
-        $entityC = $this->createInputArray();;
+        $entityB = $this->createInputArray();
+        ;
+        $entityC = $this->createInputArray();
+        ;
 
 
         $this->setUpInputList([
-            $entityA
+            $entityA,
         ], [
             $entityA,
             $entityB,
@@ -108,14 +111,13 @@ class InputListTest extends TestCase
             $entityA,
         ], [
             $entityB,
-            $entityC
+            $entityC,
         ], $client);
     }
 
     private function setUpInputList(array $current, array $input, InputListClientInterface $client)
     {
-        $inputList = new class($input) extends InputList {
-
+        $inputList = new class ($input) extends InputList {
         };
 
         $entityList = EntityList::collect($current);
@@ -128,12 +130,12 @@ class InputListTest extends TestCase
 
     private function createEntity(): Entity
     {
-        return new class implements Entity {
+        return new class () implements Entity {
             private EntityId $id;
 
             public function __construct()
             {
-                $this->id = new class extends EntityId {
+                $this->id = new class () extends EntityId {
                 };
             }
 

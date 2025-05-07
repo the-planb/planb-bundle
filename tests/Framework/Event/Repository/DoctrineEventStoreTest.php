@@ -20,14 +20,14 @@ final class DoctrineEventStoreTest extends TestCase
 {
     use ProphecyTrait;
 
-    const EVENT_LIKE_JSON = 'event.like.a.json';
+    public const EVENT_LIKE_JSON = 'event.like.a.json';
 
     public function test_it_persists_properly()
     {
-        $date  = new CarbonImmutable();
+        $date = new CarbonImmutable();
         $event = $this->give_me_a_event($date);
 
-        $registry   = $this->give_me_the_registry($date);
+        $registry = $this->give_me_the_registry($date);
         $serializer = $this->give_me_the_serializer($event);
 
         $store = new DoctrineEventStore($registry, $serializer);
@@ -46,6 +46,7 @@ final class DoctrineEventStoreTest extends TestCase
     private function give_me_the_registry(CarbonImmutable $date): object
     {
         $metadata = $this->prophesize(ClassMetadata::class)->reveal();
+        $metadata->name = 'XX';
 
         $manager = $this->prophesize(EntityManagerInterface::class);
         $manager->getClassMetadata(Event::class)

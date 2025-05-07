@@ -51,7 +51,7 @@ final class BooleanValueNormalizerTest extends TestCase
         $normalizer = new BooleanValueNormalizer();
         $this->assertEquals([
             '*' => false,
-            BooleanValue::class => true
+            BooleanValue::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 
@@ -59,7 +59,6 @@ final class BooleanValueNormalizerTest extends TestCase
 
 class BooleanExample implements BooleanValue
 {
-
     private bool $value;
 
     public function __construct(bool $value)

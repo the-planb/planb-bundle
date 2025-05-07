@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Tests\Framework\Doctrine\DBAL\Type;
@@ -11,7 +12,6 @@ use PlanB\Framework\Doctrine\DBAL\Type\EnumType;
 
 class EnumTypeTest extends TestCase
 {
-
     public function test_it_manages_data_properly()
     {
         $platform = new MySQL80Platform();
@@ -34,8 +34,7 @@ class EnumTypeTest extends TestCase
 
     private function makeType()
     {
-        return new class extends EnumType {
-
+        return new class () extends EnumType {
             public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
             {
                 return $platform->getStringTypeDeclarationSQL($column);

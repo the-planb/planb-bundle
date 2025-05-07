@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Tests\Domain\Model;
@@ -19,7 +20,7 @@ class EntityListTest extends TestCase
         $key1 = (new Ulid())->toRfc4122();
         $key2 = (new Ulid())->toRfc4122();
         $key3 = (new Ulid())->toRfc4122();
-        
+
         $entityList = EntityList::collect([
             $this->createEntity($key1),
             $this->createEntity($key2),
@@ -34,8 +35,7 @@ class EntityListTest extends TestCase
 
     private function createEntity(string $ulid): Entity
     {
-        $entityId = new class($ulid) extends EntityId {
-
+        $entityId = new class ($ulid) extends EntityId {
         };
 
         $entity = $this->prophesize(Entity::class);

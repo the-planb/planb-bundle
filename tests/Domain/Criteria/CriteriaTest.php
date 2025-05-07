@@ -33,7 +33,7 @@ class CriteriaTest extends TestCase
             'itemsPerPage' => 10,
             'order' => ['field' => 'asc'],
             'title' => ['contains' => 'name'],
-            'summary' => ['contains' => 'sentence']
+            'summary' => ['contains' => 'sentence'],
         ]);
 
         $order = $criteria->getOrder();

@@ -50,4 +50,3 @@ trait FixtureTrait
         return $manager->reveal();
     }
 }
-

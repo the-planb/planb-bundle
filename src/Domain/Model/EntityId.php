@@ -10,7 +10,7 @@ abstract class EntityId
 {
     protected Ulid $ulid;
 
-    final public function __construct(string $ulid = null)
+    final public function __construct(?string $ulid = null)
     {
         if (is_null($ulid)) {
             $this->ulid = new Ulid();

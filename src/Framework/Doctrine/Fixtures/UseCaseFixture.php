@@ -46,7 +46,7 @@ abstract class UseCaseFixture extends Fixture
         return $this->commandBus->handle($command);
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         return $this->denormalizer->denormalize($data, $type, $format, $context);
     }
@@ -85,7 +85,7 @@ abstract class UseCaseFixture extends Fixture
         return "{$className}_{$key}";
     }
 
-    public function getReferencesList(string $className, int $min, int $max = null): Vector
+    public function getReferencesList(string $className, int $min, ?int $max = null): Vector
     {
         $limit = is_null($max) ? $min : rand($min, $max);
         $references = $this->referenceRepository->getReferencesByClass()[$className];
@@ -94,16 +94,17 @@ abstract class UseCaseFixture extends Fixture
             ->shuffle()
             ->keys()
             ->take($limit)
+            // @phpstan-ignore-next-line
             ->map(fn ($key) => $this->getReference($key, $className));
     }
 
-    public function getManyReferences(string $className, int $min, int $max = null): array
+    public function getManyReferences(string $className, int $min, ?int $max = null): array
     {
         return $this->getReferencesList($className, $min, $max)
             ->toArray();
     }
 
-    public function getManyReferencesLikeIri(string $className, int $min, int $max = null): array
+    public function getManyReferencesLikeIri(string $className, int $min, ?int $max = null): array
     {
         return $this->getReferencesList($className, $min, $max)
             ->map($this->resourceToIri(...))

@@ -14,7 +14,6 @@ use PlanB\Domain\Criteria\Operator;
 use PlanB\Domain\Criteria\Order;
 use PlanB\Domain\Criteria\OrderDir;
 use PlanB\Framework\Doctrine\Criteria\DoctrineCriteriaConverter;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 class DoctrineCriteriaConverterTest extends TestCase
@@ -29,71 +28,88 @@ class DoctrineCriteriaConverterTest extends TestCase
 
         $expr = new Expr();
 
-        $builder = $this->prophesize(QueryBuilder::class);
-        $builder->expr()
+        $builder = $this->createMock(QueryBuilder::class);
+        $builder->expects($this->any())
+            ->method('expr')
             ->willReturn($expr);
 
-        $query = $this->prophesize(Query::class);
-        $query->execute()
+        $query = $this->createMock(Query::class);
+        $query->expects($this->any())
+            ->method('execute')
             ->willReturn(self::QUERY_RESULT);
 
-        $query->getSingleScalarResult()
+        $query->expects($this->any())
+            ->method('getSingleScalarResult')
             ->willReturn(self::QUERY_SCALAR_RESULT);
 
-        $builder->getQuery()
-            ->willReturn($query->reveal());
+        $builder->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($query);
 
         if (is_string($where)) {
-            $builder->where($where)
-                ->shouldBeCalledOnce();
+            $builder->expects($this->once())
+                ->method('where')
+                ->with($this->equalTo($where))
+                ->willReturnSelf(); // Importante para la encadenación de métodos
         } else {
-            $builder->where(Argument::any())
-                ->shouldNotBeCalled();
+            $builder->expects($this->never())
+                ->method('where');
         }
 
         if (is_array($order)) {
-            $builder->orderBy(...$order)
-                ->shouldBeCalledOnce();
+            $builder->expects($this->once())
+                ->method('orderBy')
+                ->with(...$order)
+                ->willReturnSelf(); // Importante para la encadenación de métodos
         } else {
-            $builder->orderBy(Argument::class)
-                ->shouldNotBeCalled();
+            $builder->expects($this->never())
+                ->method('orderBy');
         }
 
         if (is_int($firstResult)) {
-            $builder->setFirstResult($firstResult)
-                ->shouldBeCalledOnce();
+            $builder->expects($this->once())
+                ->method('setFirstResult')
+                ->with($this->equalTo($firstResult))
+                ->willReturnSelf(); // Importante para la encadenación de métodos
         } else {
-            $builder->setFirstResult(Argument::any())
-                ->shouldNotBeCalled();
+            $builder->expects($this->never())
+                ->method('setFirstResult');
         }
 
         if (is_int($maxResults)) {
-            $builder->setMaxResults($maxResults)
-                ->shouldBeCalledOnce();
+            $builder->expects($this->once())
+                ->method('setMaxResults')
+                ->with($this->equalTo($maxResults))
+                ->willReturnSelf(); // Importante para la encadenación de métodos
         } else {
-            $builder->setMaxResults(Argument::any())
-                ->shouldNotBeCalled();
+            $builder->expects($this->never())
+                ->method('setMaxResults');
         }
 
         if ($count) {
-            $builder->select('count(A.id)')
-                ->shouldBeCalled();
+            $builder->expects($this->once())
+                ->method('select')
+                ->with($this->equalTo('count(A.id)'))
+                ->willReturnSelf(); // Importante para la encadenación de métodos
         } else {
-            $builder->select(Argument::any())
-                ->shouldNotBeCalled();
+            $builder->expects($this->never())
+                ->method('select');
         }
 
-        return $builder->reveal();
+        return $builder;
+
     }
 
     private function give_me_a_converter(QueryBuilder $builder): DoctrineCriteriaConverter
     {
 
-        $repository = $this->prophesize(ServiceEntityRepository::class);
-        $repository->createQueryBuilder(Argument::any())
+        $repository = $this->createMock(ServiceEntityRepository::class);
+        $repository->expects($this->any())
+            ->method('createQueryBuilder')
+            ->with($this->anything())
             ->willReturn($builder);
 
-        return new DoctrineCriteriaConverter($repository->reveal());
+        return new DoctrineCriteriaConverter($repository);
 
     }
 

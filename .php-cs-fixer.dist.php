@@ -7,6 +7,7 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR12' => true,
-        '@PHP80Migration' => true
+        '@PHP80Migration' => true,
+        'nullable_type_declaration_for_default_null_value' => true,
     ])
     ->setFinder($finder);

@@ -70,5 +70,3 @@ class DefaultFilterTest extends TestCase
         ];
     }
 }
-
-

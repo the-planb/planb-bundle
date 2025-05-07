@@ -58,7 +58,7 @@ final class EntityIdNormalizerTest extends TestCase
         $normalizer = new EntityIdNormalizer();
         $this->assertEquals([
             '*' => false,
-            EntityId::class => true
+            EntityId::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 

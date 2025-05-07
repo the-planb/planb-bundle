@@ -12,7 +12,6 @@ use PlanB\Type\BooleanValue;
 
 final class BooleanTypeTest extends TestCase
 {
-
     public function test_it_manages_data_properly()
     {
         $platform = new MySQL80Platform();
@@ -34,8 +33,7 @@ final class BooleanTypeTest extends TestCase
 
     private function makeType()
     {
-        return new class extends BooleanType {
-
+        return new class () extends BooleanType {
             public function getFQN(): string
             {
                 return BooleanExample::class;

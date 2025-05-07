@@ -42,7 +42,7 @@ class EntityNormalizerTest extends TestCase
     {
         $normalizer = new EntityNormalizer();
         $this->assertEquals([
-            Entity::class => true
+            Entity::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 }

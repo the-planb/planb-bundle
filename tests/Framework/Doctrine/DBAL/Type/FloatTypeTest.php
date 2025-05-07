@@ -13,11 +13,9 @@ use PlanB\Type\FloatValue;
 
 final class FloatTypeTest extends TestCase
 {
-
     private function makeType()
     {
-        return new class extends FloatType {
-
+        return new class () extends FloatType {
             public function getFQN(): string
             {
                 return FloatExample::class;
@@ -57,7 +55,7 @@ final class FloatTypeTest extends TestCase
             ["101.1", new FloatExample(101.1)],
             ["12", new FloatExample(12)],
             [12, new FloatExample(12)],
-            [null, null]
+            [null, null],
         ];
     }
 

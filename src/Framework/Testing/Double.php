@@ -16,7 +16,7 @@ abstract class Double
     /**
      * @throws \ReflectionException
      */
-    public function __construct(callable $prophesize, callable $configurator = null)
+    public function __construct(callable $prophesize, ?callable $configurator = null)
     {
         $classNameOrInterface = $this->classNameOrInterface();
         $this->prophesize = $prophesize;
