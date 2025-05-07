@@ -24,7 +24,7 @@ final class DomainEventsMiddlewareTest extends TestCase
         $this->give_me_a_dispatcher_that_emit_events($events);
 
         $middleware = new DomainEventsMiddleware($repository);
-        $response   = $middleware->execute(new \stdClass(), fn() => 'response');
+        $response   = $middleware->execute(new \stdClass(), fn () => 'response');
 
         $this->assertSame('response', $response);
     }

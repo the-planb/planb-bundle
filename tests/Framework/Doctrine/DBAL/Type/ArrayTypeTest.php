@@ -12,7 +12,6 @@ use PlanB\Type\ArrayValue;
 
 final class ArrayTypeTest extends TestCase
 {
-
     public function test_it_manages_data_properly()
     {
         $platform = new MySQL80Platform();
@@ -35,8 +34,7 @@ final class ArrayTypeTest extends TestCase
 
     private function makeType()
     {
-        return new class extends ArrayType {
-
+        return new class () extends ArrayType {
             public function getFQN(): string
             {
                 return ArrayExample::class;

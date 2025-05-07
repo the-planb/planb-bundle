@@ -13,11 +13,9 @@ use PlanB\Type\IntegerValue;
 
 final class IntegerTypeTest extends TestCase
 {
-
     private function makeType()
     {
-        return new class extends IntegerType {
-
+        return new class () extends IntegerType {
             public function getFQN(): string
             {
                 return IntegerExample::class;

@@ -2,7 +2,6 @@
 
 namespace PlanB\Tests\Domain\Criteria;
 
-
 use PHPUnit\Framework\TestCase;
 use PlanB\Domain\Criteria\Pagination;
 

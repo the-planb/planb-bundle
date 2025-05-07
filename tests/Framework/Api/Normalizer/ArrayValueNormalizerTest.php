@@ -51,7 +51,7 @@ final class ArrayValueNormalizerTest extends TestCase
         $normalizer = new ArrayValueNormalizer();
         $this->assertEquals([
             '*' => false,
-            ArrayValue::class => true
+            ArrayValue::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 
@@ -59,7 +59,6 @@ final class ArrayValueNormalizerTest extends TestCase
 
 class ArrayValueExample implements ArrayValue
 {
-
     private array $value;
 
     public function __construct(array $value)

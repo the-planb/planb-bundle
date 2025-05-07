@@ -51,14 +51,13 @@ final class IntegerValueNormalizerTest extends TestCase
         $normalizer = new IntegerValueNormalizer();
         $this->assertEquals([
             '*' => false,
-            IntegerValue::class => true
+            IntegerValue::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 }
 
 class IntegerExample implements IntegerValue
 {
-
     private int $value;
 
     public function __construct(int $value)

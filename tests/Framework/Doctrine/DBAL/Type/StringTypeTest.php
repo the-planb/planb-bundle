@@ -12,7 +12,6 @@ use PlanB\Type\StringValue;
 
 final class StringTypeTest extends TestCase
 {
-
     public function test_it_manages_data_properly()
     {
         $platform = new MySQL80Platform();
@@ -34,8 +33,7 @@ final class StringTypeTest extends TestCase
 
     private function makeType()
     {
-        return new class extends StringType {
-
+        return new class () extends StringType {
             public function getFQN(): string
             {
                 return StringExample::class;

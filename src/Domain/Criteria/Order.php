@@ -7,7 +7,7 @@ final class Order
     private ?string $field;
     private ?OrderDir $type;
 
-    public function __construct(string $field = null, OrderDir $type = null)
+    public function __construct(?string $field = null, ?OrderDir $type = null)
     {
         $this->field = $field;
         $this->type = $type;

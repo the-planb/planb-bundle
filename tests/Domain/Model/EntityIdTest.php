@@ -8,10 +8,8 @@ use PlanB\Domain\Model\EntityId;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Ulid;
 
-
 class MyEntityId extends EntityId
 {
-
 }
 
 final class EntityIdTest extends TestCase

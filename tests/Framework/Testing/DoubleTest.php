@@ -21,13 +21,12 @@ class DoubleTest extends TestCase
         $vector = $builder->reveal();
         $this->assertEquals(111, $vector->count());
         $this->assertEquals(111, $vector->filter()->count());
-        
+
     }
 }
 
 class DoubleBuilder extends Double
 {
-
     public function reveal(): Vector
     {
         return $this->double()

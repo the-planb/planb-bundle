@@ -49,8 +49,7 @@ class CustomFilterFactoryTest extends TestCase
         Expr   $expr,
         Filter $filter,
         string $alias
-    ): CustomFilter
-    {
+    ): CustomFilter {
 
         $customFilter = $this->prophesize(CustomFilter::class);
 

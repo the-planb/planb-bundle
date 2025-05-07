@@ -51,7 +51,7 @@ final class StringValueNormalizerTest extends TestCase
         $normalizer = new StringValueNormalizer();
         $this->assertEquals([
             '*' => false,
-            StringValue::class => true
+            StringValue::class => true,
         ], $normalizer->getSupportedTypes('format'));
     }
 
@@ -59,7 +59,6 @@ final class StringValueNormalizerTest extends TestCase
 
 class StringExample implements StringValue
 {
-
     private string $value;
 
     public function __construct(string $value)

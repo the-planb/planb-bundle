@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final class FixtureBuilder
 {
-
     private CommandBus|ObjectProphecy $commandBus;
     private DenormalizerInterface|ObjectProphecy $denormalizer;
     private ReferenceRepository|ObjectProphecy $referenceRepository;
@@ -132,10 +131,9 @@ final class FixtureBuilder
 
 class EntityExample implements Entity
 {
-
     public function getId(): EntityId
     {
-        $id = new class extends EntityId {
+        $id = new class () extends EntityId {
         };
         return $id;
     }
@@ -143,7 +141,6 @@ class EntityExample implements Entity
 
 class FixtureExample extends UseCaseFixture
 {
-
     public function loadData(): void
     {
         $this->createMany(10, function () {

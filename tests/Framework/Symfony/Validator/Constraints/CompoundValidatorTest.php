@@ -15,7 +15,6 @@ use Symfony\Component\Validator\Validation;
 
 final class CompoundValidatorTest extends TestCase
 {
-
     #[DataProvider('valuesProvider')]
     public function test_it_validates_if_a_value_object_is_passed(mixed $value, int $violationsCount)
     {
@@ -52,9 +51,8 @@ final class CompoundValidatorTest extends TestCase
     }
 }
 
-final class  CompoundExample extends Compound
+final class CompoundExample extends Compound
 {
-
     protected function getConstraints(array $options): array
     {
         return [

@@ -12,7 +12,7 @@ trait ControllerTrait
     private function giveMeAController()
     {
         $controller = $this->createPartialMock(FosUserContextHash::class, [
-            'getUser'
+            'getUser',
         ]);
 
         return new ControllerBuilder($this->prophesize(...), $controller);

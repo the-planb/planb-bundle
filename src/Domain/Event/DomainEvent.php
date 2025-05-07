@@ -20,7 +20,7 @@ abstract class DomainEvent implements DomainEventInterface
     private CarbonImmutable $when;
     private object $event;
 
-    public function __construct(object $event, CarbonImmutable $when = null)
+    public function __construct(object $event, ?CarbonImmutable $when = null)
     {
         $this->event = $event;
         $this->when  = $when ?? CarbonImmutable::now();

@@ -11,7 +11,6 @@ use Symfony\Component\Uid\Ulid;
 
 final class EventIdTypeTest extends TestCase
 {
-
     public function test_it_can_create_a_eventId_from_a_value()
     {
         $type = new EventIdType();

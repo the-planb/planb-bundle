@@ -16,12 +16,10 @@ use Symfony\Component\Uid\Ulid;
 
 class MyEntityId extends EntityId
 {
-
 }
 
 class MyEntityIdType extends EntityIdType
 {
-
     public function makeFromValue(string $value): EntityId
     {
         return new MyEntityId($value);
@@ -34,15 +32,14 @@ class MyEntityIdType extends EntityIdType
 
 final class EntityIdTypeTest extends TestCase
 {
-
     use ProphecyTrait;
 
     public function test_it_returns_the_correct_sql_declaration()
     {
         $type = new MyEntityIdType();
 
-//        $platform = new MySQL80Platform();
-//        $this->assertSame('BINARY(16)', $type->getSQLDeclaration([], $platform));
+        //        $platform = new MySQL80Platform();
+        //        $this->assertSame('BINARY(16)', $type->getSQLDeclaration([], $platform));
 
         $platform = new PostgreSQLPlatform();
         $this->assertSame('UUID', $type->getSQLDeclaration([], $platform));
