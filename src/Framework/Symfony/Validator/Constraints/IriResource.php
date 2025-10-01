@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Framework\Symfony\Validator\Constraints;
@@ -38,4 +39,3 @@ final class IriResource extends Constraint
     }
 
 }
-

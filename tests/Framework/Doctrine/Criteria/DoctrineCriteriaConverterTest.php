@@ -13,6 +13,7 @@ use PlanB\Domain\Criteria\FilterList;
 use PlanB\Domain\Criteria\Operator;
 use PlanB\Domain\Criteria\Order;
 use PlanB\Domain\Criteria\OrderDir;
+use PlanB\Domain\Criteria\Pagination;
 use PlanB\Framework\Doctrine\Criteria\DoctrineCriteriaConverter;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -23,9 +24,13 @@ class DoctrineCriteriaConverterTest extends TestCase
     const QUERY_RESULT = 'query result';
     const QUERY_SCALAR_RESULT = 'query scalar result';
 
-    private function give_me_a_builder(?string $where = null, ?array $order = null, ?int $firstResult = null, ?int $maxResults = null, bool $count = false): QueryBuilder
-    {
-
+    private function give_me_a_builder(
+        ?string $where = null,
+        ?array $order = null,
+        ?int $firstResult = null,
+        ?int $maxResults = null,
+        bool $count = false
+    ): QueryBuilder {
         $expr = new Expr();
 
         $builder = $this->createMock(QueryBuilder::class);
@@ -97,12 +102,10 @@ class DoctrineCriteriaConverterTest extends TestCase
         }
 
         return $builder;
-
     }
 
     private function give_me_a_converter(QueryBuilder $builder): DoctrineCriteriaConverter
     {
-
         $repository = $this->createMock(ServiceEntityRepository::class);
         $repository->expects($this->any())
             ->method('createQueryBuilder')
@@ -110,7 +113,6 @@ class DoctrineCriteriaConverterTest extends TestCase
             ->willReturn($builder);
 
         return new DoctrineCriteriaConverter($repository);
-
     }
 
 
@@ -122,8 +124,8 @@ class DoctrineCriteriaConverterTest extends TestCase
                 new Filter('price', Operator::GREATER_THAN, 15),
             ]),
             order: new Order('price', OrderDir::ASC),
-            page: 20,
-            itemsPerPage: 10
+            pagination: new Pagination(20, 10)
+
         );
 
 
@@ -147,8 +149,7 @@ class DoctrineCriteriaConverterTest extends TestCase
                 new Filter('price', Operator::GREATER_THAN, 15),
             ]),
             order: Order::empty(),
-            page: 20,
-            itemsPerPage: 10
+            pagination: new Pagination(20, 10)
         );
 
         $builder = $this->give_me_a_builder(
@@ -167,8 +168,7 @@ class DoctrineCriteriaConverterTest extends TestCase
         $criteria = new Criteria(
             filters: FilterList::collect(),
             order: new Order('price', OrderDir::ASC),
-            page: 20,
-            itemsPerPage: 10
+            pagination: new Pagination(20, 10)
         );
 
 
@@ -211,8 +211,7 @@ class DoctrineCriteriaConverterTest extends TestCase
                 new Filter('price', Operator::GREATER_THAN, 15),
             ]),
             order: Order::empty(),
-            page: 20,
-            itemsPerPage: 10
+            pagination: new Pagination(20, 10)
         );
 
         $builder = $this->give_me_a_builder(

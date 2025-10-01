@@ -10,6 +10,8 @@ use PlanB\Domain\Criteria\OrderDir;
 
 class CriteriaTest extends TestCase
 {
+
+
     public function test_it_manage_empty_data_properly()
     {
         $criteria = Criteria::empty();
@@ -28,7 +30,7 @@ class CriteriaTest extends TestCase
 
     public function test_it_manage_data_properly()
     {
-        $criteria = Criteria::fromValues([
+        $criteria = Criteria::fromArray([
             'page' => 4,
             'itemsPerPage' => 10,
             'order' => ['field' => 'asc'],
@@ -54,6 +56,7 @@ class CriteriaTest extends TestCase
         $this->assertEquals('summary', $filters->get(1)->getField());
         $this->assertEquals(Operator::CONTAINS, $filters->get(1)->getOperator());
         $this->assertEquals('sentence', $filters->get(1)->getValue());
-
     }
+
+
 }

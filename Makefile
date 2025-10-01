@@ -1,14 +1,17 @@
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: tests
-tests:
+tests/run:
 	bin/phpunit --no-coverage ${ARGS}
 
-coverage:
+tests/coverage:
 	XDEBUG_MODE=coverage bin/phpunit ${ARGS}
 
+tests/show-coverage:
+	xdg-open build/reports/coverage/dashboard.html
+
 qa:
-	PHP_CS_FIXER_IGNORE_ENV=1 bin/qa src
+	bin/qa src
 
 major:
 	git switch main

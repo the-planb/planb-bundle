@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Framework\Symfony\Validator\Constraints;
@@ -10,10 +11,8 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-
 class IriResourceValidator extends ConstraintValidator
 {
-
     private RouterInterface $router;
     private ResourceMetadataCollectionFactoryInterface $factory;
 
@@ -57,7 +56,7 @@ class IriResourceValidator extends ConstraintValidator
         $resource = $metadata->getOperation();
 
         $route = $this->router->generate($resource->getName(), [
-            'id' => 'X'
+            'id' => 'X',
         ]);
 
         $route = preg_quote($route, '/');

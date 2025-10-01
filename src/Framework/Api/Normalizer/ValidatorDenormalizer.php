@@ -43,7 +43,7 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
         foreach ($members as $name) {
             $member = $classMetaData->getPropertyMetadata($name);
             $constraints[$name] = Map::collect($member)
-                ->flatMap(fn(PropertyMetadata $metadata) => $metadata->getConstraints())
+                ->flatMap(fn (PropertyMetadata $metadata) => $metadata->getConstraints())
                 ->toArray();
         }
 

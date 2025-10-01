@@ -21,7 +21,6 @@ final class DoctrineCriteriaConverter
         $this->repository = $repository;
         $this->alias = 'A';
         $this->filtersFactory = new CustomFilterFactory($filters);
-
     }
 
     public function match(Criteria $criteria): self
@@ -103,7 +102,7 @@ final class DoctrineCriteriaConverter
     private function addMaxResults(Criteria $criteria): self
     {
         $pagination = $criteria->getPagination();
-        $this->builder->setMaxResults($pagination->getMaxResults());
+        $this->builder->setMaxResults($criteria->getLimit());
         return $this;
     }
 
