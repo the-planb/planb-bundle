@@ -48,10 +48,13 @@ final class Criteria
         return new Filter($field, Operator::from($operator), $value);
     }
 
-    private static function orderFromValue(array $value): Order
+    private static function orderFromValue(?array $value): Order
     {
+        if (empty($value)) {
+            return Order::empty();
+        }
         $field = array_key_first($value);
-        $type = $value[$field];
+        $type = strtolower($value[$field]);
 
         return new Order($field, OrderDir::tryFrom($type));
     }

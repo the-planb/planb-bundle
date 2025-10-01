@@ -35,3 +35,7 @@ services:
       $sharedMaxAge: '%api_platform.http_cache.shared_max_age%'
       $vary: '%api_platform.http_cache.vary%'
       $public: '%api_platform.http_cache.public%'
+
+
+  PlanB\Domain\Event\DomainEventDispatcher:
+    factory: [ 'PlanB\Domain\Event\DomainEventDispatcher', 'instance' ]
