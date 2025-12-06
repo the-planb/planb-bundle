@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Constraints\Collection;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\PropertyMetadata;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -32,14 +33,17 @@ final class ValidatorDenormalizer implements DenormalizerInterface, Denormalizer
         $type = $operation['class'] ?? $type;
         $classMetaData = $this->validator->getMetadataFor($type);
 
-        if (!isset($classMetaData->members)) {
+        if (!$classMetaData instanceof ClassMetadata) {
             return $this->denormalizer->denormalize($data, $type, self::FORMAT, $context);
         }
 
+        $members = $classMetaData->getConstrainedProperties();
+
         $constraints = [];
-        foreach ($classMetaData->members as $name => $member) {
+        foreach ($members as $name) {
+            $member = $classMetaData->getPropertyMetadata($name);
             $constraints[$name] = Map::collect($member)
-                ->flatMap(fn(PropertyMetadata $metadata) => $metadata->constraints)
+                ->flatMap(fn(PropertyMetadata $metadata) => $metadata->getConstraints())
                 ->toArray();
         }
 
