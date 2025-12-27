@@ -22,6 +22,7 @@ class DoctrineCriteriaConverterTest extends TestCase
     use ProphecyTrait;
 
     const QUERY_RESULT = 'query result';
+    const QUERY_SINGLE_RESULT = 'query single result';
     const QUERY_SCALAR_RESULT = 'query scalar result';
 
     private function give_me_a_builder(
@@ -46,6 +47,15 @@ class DoctrineCriteriaConverterTest extends TestCase
         $query->expects($this->any())
             ->method('getSingleScalarResult')
             ->willReturn(self::QUERY_SCALAR_RESULT);
+
+        $query->expects($this->any())
+            ->method('getSingleResult')
+            ->willReturn(self::QUERY_SINGLE_RESULT);
+        
+        $query->expects($this->any())
+            ->method('setMaxResults')
+            ->with($this->anything())
+            ->willReturnSelf();
 
         $builder->expects($this->any())
             ->method('getQuery')
@@ -200,6 +210,7 @@ class DoctrineCriteriaConverterTest extends TestCase
         $this->assertInstanceOf(Query::class, $converter->getQuery());
         $this->assertEquals(self::QUERY_RESULT, $converter->execute());
         $this->assertEquals(self::QUERY_SCALAR_RESULT, $converter->getSingleScalarResult());
+        $this->assertEquals(self::QUERY_SINGLE_RESULT, $converter->getSingleResult());
     }
 
 

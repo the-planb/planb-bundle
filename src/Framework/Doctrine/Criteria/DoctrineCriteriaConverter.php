@@ -131,4 +131,11 @@ final class DoctrineCriteriaConverter
         return $this->getQuery()->getSingleScalarResult();
     }
 
+    public function getSingleResult(): mixed
+    {
+        return $this->getQuery()
+            ->setMaxResults(1)
+            ->getSingleResult();
+    }
+
 }
