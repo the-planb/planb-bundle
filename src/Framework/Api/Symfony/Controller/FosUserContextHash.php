@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PlanB\Framework\Api\Symfony\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

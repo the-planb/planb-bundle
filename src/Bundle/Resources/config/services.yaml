@@ -1,4 +1,6 @@
 parameters:
+  app.postman_base_url_default: '/'
+
 services:
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
@@ -35,6 +37,13 @@ services:
       $sharedMaxAge: '%api_platform.http_cache.shared_max_age%'
       $vary: '%api_platform.http_cache.vary%'
       $public: '%api_platform.http_cache.public%'
+
+
+  PlanB\Framework\Api\OpenApi\PostmanServer:
+    decorates: "api_platform.openapi.factory"
+    arguments:
+      $decorated: "@.inner"
+      $baseUrl: '%env(default:app.postman_base_url_default:POSTMAN_BASE_URL)%'
 
 
   PlanB\Domain\Event\DomainEventDispatcher:
