@@ -27,11 +27,12 @@ class DoctrineCriteriaConverterTest extends TestCase
 
     private function give_me_a_builder(
         ?string $where = null,
-        ?array $order = null,
-        ?int $firstResult = null,
-        ?int $maxResults = null,
-        bool $count = false
-    ): QueryBuilder {
+        ?array  $order = null,
+        ?int    $firstResult = null,
+        ?int    $maxResults = null,
+        bool    $count = false
+    ): QueryBuilder
+    {
         $expr = new Expr();
 
         $builder = $this->createMock(QueryBuilder::class);
@@ -51,7 +52,7 @@ class DoctrineCriteriaConverterTest extends TestCase
         $query->expects($this->any())
             ->method('getSingleResult')
             ->willReturn(self::QUERY_SINGLE_RESULT);
-        
+
         $query->expects($this->any())
             ->method('setMaxResults')
             ->with($this->anything())
@@ -176,7 +177,7 @@ class DoctrineCriteriaConverterTest extends TestCase
     public function test_it_gets_a_doctrine_criteria_without_filters_properly()
     {
         $criteria = new Criteria(
-            filters: FilterList::collect(),
+            filters: FilterList::collect([]),
             order: new Order('price', OrderDir::ASC),
             pagination: new Pagination(20, 10)
         );

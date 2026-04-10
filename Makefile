@@ -1,49 +1,47 @@
-ARGS = $(filter-out $@,$(MAKECMDGOALS))
+.PHONY: tests/unit tests/coverage analysis fix-style pre-commit
 
-.PHONY: tests
+# Añadimos pre-commit a la lista de palabras que filtramos de los argumentos
+ARGS = $(filter-out $@ pre-commit fix-style analysis tests/unit tests/coverage,$(MAKECMDGOALS))
+
+# Variables de binarios
+PHP_CS_FIXER = bin/php-cs-fixer
+PHPSTAN = bin/phpstan
+PHPUNIT = bin/phpunit
+PHP_CS_CONFIG = .php-cs-fixer.dist.php
+CLEAN_FILES = $(strip $(FILES))
+
 tests/run:
-	bin/phpunit --no-coverage ${ARGS}
+	$(PHPUNIT) --no-coverage --display-all-issues $(ARGS)
 
 tests/coverage:
-	XDEBUG_MODE=coverage bin/phpunit ${ARGS}
+	XDEBUG_MODE=coverage $(PHPUNIT) $(ARGS)
 
-tests/show-coverage:
+show/coverage:
 	xdg-open build/reports/coverage/dashboard.html
 
-qa:
-	bin/qa src
+git/massive-fix:
+	git add . && git diff --staged --name-only --diff-filter=M | xargs -I {} sh -c '\
+		hash=$$(git log -n 1 --pretty=format:%H -- "$$1"); \
+		if [ -n "$$hash" ]; then \
+			git commit --no-verify --fixup="$$hash" "$$1"; \
+		fi \
+	' -- {}
 
-major:
-	git switch main
-	standard-version --release-as major
-	git push origin --follow-tags
+analysis:
+	$(PHPSTAN) analyse src --level=max
 
-minor:
-	git switch main
-	standard-version --release-as minor
-	git push origin --follow-tags
+# Formateo de código. Si se pasa FILES, actúa solo sobre ellos.
+fix-style:
+	@if [ -z "$(strip $(FILES))" ]; then \
+		$(PHP_CS_FIXER) fix --config=$(PHP_CS_CONFIG) .; \
+	else \
+		$(PHP_CS_FIXER) fix --config=$(PHP_CS_CONFIG) --path-mode=intersection -- $(strip $(FILES)); \
+	fi
 
 
-hotfix:
-	git switch main
-	standard-version --release-as patch
-	git push origin --follow-tags
+# Meta-tarea para el hook de git
+pre-commit: fix-style analysis tests/unit
 
-sonar:
-	bin/phpunit tests/
-	sed 's:'$(PWD)'/::g' build/reports/coverage.xml > build/reports/coverage.relative.xml
-	docker run --rm -ti -v $(PWD):/usr/src --link sonarqube newtmitch/sonar-scanner sonar-scanner -X \
-	  -Dsonar.projectKey=planb-bundle \
-	  -Dsonar.projectName=planb-bundle \
-	  -Dsonar.sources=src \
-	  -Dsonar.php.coverage.reportPaths=build/reports/coverage.relative.xml \
-	  -Dsonar.php.tests.reportPath=build/reports/tests.xml \
-	  -Dsonar.host.url=http://sonarqube:9000 \
-	  -Dsonar.login=4274b727a6e13bbc44cdd637fbba892ffc5b40e1
+%:
+	@:
 
-init:
-	cp -R bin/hooks/* .git/hooks/
-	standard-version --release-as v0.1.0
-
-%:      # thanks to chakrit
-	@:    # thanks to William Pursell

@@ -6,7 +6,11 @@
   "autoload": {
     "psr-4": {
       "PlanB\\": "src/"
-    }
+    },
+    "files": [
+      "src/Helper/types.php",
+      "src/Helper/iterable.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -25,7 +29,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/the-planb/planb"
+      "url": "https://github.com/the-planb/ds"
     }
   ],
   "require": {
@@ -34,7 +38,7 @@
     "ext-iconv": "*",
     "api-platform/doctrine-orm": "^4.2.1",
     "api-platform/symfony": "^4.2.1",
-    "planb/planb": "^1.0",
+    "planb/ds": "^1.0",
     "symfony/uid": "^7.3",
     "symfony/http-kernel": "^7.3",
     "symfony/config": "^7.3",

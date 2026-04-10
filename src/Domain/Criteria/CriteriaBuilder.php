@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PlanB\Domain\Criteria;
 
+use function PlanB\Resources\DS\Helper\{map};
+
 final class CriteriaBuilder
 {
     private FilterList $filters;

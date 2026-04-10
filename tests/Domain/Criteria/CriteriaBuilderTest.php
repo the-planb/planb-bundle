@@ -61,7 +61,6 @@ class CriteriaBuilderTest extends TestCase
         $criteria = CriteriaBuilder::make([
             'name' => ['equals' => 'pepe'],
             'order' => [
-                0 => [],
                 'age' => 'desc'
             ],
             'page' => 5,

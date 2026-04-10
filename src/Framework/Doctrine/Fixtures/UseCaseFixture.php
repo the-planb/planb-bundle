@@ -91,11 +91,11 @@ abstract class UseCaseFixture extends Fixture
         $references = $this->referenceRepository->getReferencesByClass()[$className];
 
         return Map::collect($references)
-            ->shuffle()
             ->keys()
+            ->shuffle()
             ->take($limit)
             // @phpstan-ignore-next-line
-            ->map(fn ($key) => $this->getReference($key, $className));
+            ->map(fn($key) => $this->getReference($key, $className));
     }
 
     public function getManyReferences(string $className, int $min, ?int $max = null): array
