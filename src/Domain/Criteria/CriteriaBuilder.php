@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PlanB\Domain\Criteria;
 
+use function PlanB\Resources\DS\Helper\map;
+
 final class CriteriaBuilder
 {
     private FilterList $filters;
@@ -84,6 +86,7 @@ final class CriteriaBuilder
 
     private function withOrderList(array $orders): self
     {
+
         $list = map($orders, function ($value, $key) {
             if (!is_string($key) || !is_string($value)) {
                 return null;
@@ -91,7 +94,7 @@ final class CriteriaBuilder
 
             $type = strtolower($value);
             return new Order($key, OrderDir::tryFrom($type));
-        });
+        })->filter();
 
         $this->order = $list->isEmpty() ?
             Order::empty() :

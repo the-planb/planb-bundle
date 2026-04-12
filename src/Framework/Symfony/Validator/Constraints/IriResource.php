@@ -19,6 +19,10 @@ final class IriResource extends Constraint
 
         $options = (array)$options;
 
+        if (isset($options['resourceClass'])) {
+            $this->resourceClass = $options['resourceClass'];
+        }
+
         parent::__construct($options, $groups, $payload);
 
         if (!isset($this->resourceClass)) {
