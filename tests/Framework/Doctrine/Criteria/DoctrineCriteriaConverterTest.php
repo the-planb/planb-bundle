@@ -21,9 +21,9 @@ class DoctrineCriteriaConverterTest extends TestCase
 {
     use ProphecyTrait;
 
-    const QUERY_RESULT = 'query result';
-    const QUERY_SINGLE_RESULT = 'query single result';
-    const QUERY_SCALAR_RESULT = 'query scalar result';
+    public const QUERY_RESULT = 'query result';
+    public const QUERY_SINGLE_RESULT = 'query single result';
+    public const QUERY_SCALAR_RESULT = 'query scalar result';
 
     private function give_me_a_builder(
         ?string $where = null,
@@ -51,7 +51,7 @@ class DoctrineCriteriaConverterTest extends TestCase
         $query->expects($this->any())
             ->method('getSingleResult')
             ->willReturn(self::QUERY_SINGLE_RESULT);
-        
+
         $query->expects($this->any())
             ->method('setMaxResults')
             ->with($this->anything())
@@ -135,7 +135,6 @@ class DoctrineCriteriaConverterTest extends TestCase
             ]),
             order: new Order('price', OrderDir::ASC),
             pagination: new Pagination(20, 10)
-
         );
 
 
@@ -228,8 +227,8 @@ class DoctrineCriteriaConverterTest extends TestCase
         $builder = $this->give_me_a_builder(
             where: "LOWER(A.title) = 'the title' AND A.price > 15",
             count: true
-//            firstResult: 190,  //(20 - 1) * 10
-//            maxResults: 10
+            //            firstResult: 190,  //(20 - 1) * 10
+            //            maxResults: 10
         );
         $converter = $this->give_me_a_converter($builder);
 

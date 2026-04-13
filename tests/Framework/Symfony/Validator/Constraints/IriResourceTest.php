@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace PlanB\Tests\Framework\Symfony\Validator\Constraints;
@@ -18,7 +19,7 @@ class IriResourceTest extends TestCase
     public function test_it_has_the_correct_target()
     {
         $constraint = new IriResource('resourceClass');
-    
+
         $this->assertEquals(Constraint::PROPERTY_CONSTRAINT, $constraint->getTargets());
     }
 }

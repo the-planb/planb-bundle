@@ -19,7 +19,7 @@ final class TypesTest extends TestCase
         $this->assertTrue(is_of_the_type(new \stdClass(), 'object'));
         $this->assertTrue(is_of_the_type(true, 'bool'));
         $this->assertTrue(is_of_the_type(null, 'null'));
-        $this->assertTrue(is_of_the_type(fn() => 'foo', 'callable'));
+        $this->assertTrue(is_of_the_type(fn () => 'foo', 'callable'));
         $this->assertTrue(is_of_the_type([1, 2], 'countable'));
         $this->assertTrue(is_of_the_type([1, 2], 'iterable'));
         $this->assertTrue(is_of_the_type(new \stdClass(), \stdClass::class));
@@ -42,7 +42,7 @@ final class TypesTest extends TestCase
         $this->assertSame('array', type_of([1, 2]));
         $this->assertSame('stdClass', type_of(new \stdClass()));
         $this->assertSame('null', type_of(null));
-        $this->assertSame('callable', type_of(fn() => 'foo'));
+        $this->assertSame('callable', type_of(fn () => 'foo'));
         $this->assertSame('boolean', type_of(true));
         $this->assertSame('double', type_of(1.1));
         $this->assertSame('resource', type_of($resource));

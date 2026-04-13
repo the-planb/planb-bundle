@@ -95,7 +95,7 @@ abstract class UseCaseFixture extends Fixture
             ->shuffle()
             ->take($limit)
             // @phpstan-ignore-next-line
-            ->map(fn($key) => $this->getReference($key, $className));
+            ->map(fn ($key) => $this->getReference($key, $className));
     }
 
     public function getManyReferences(string $className, int $min, ?int $max = null): array

@@ -11,7 +11,7 @@ final class ArraysTest extends TestCase
     public function test_iterable_to_array()
     {
         $this->assertSame([1, 2, 3], iterable_to_array([1, 2, 3]));
-        
+
         $generator = (function () {
             yield 1;
             yield 2;
@@ -35,16 +35,16 @@ final class ArraysTest extends TestCase
             'user' => [
                 'name' => 'John',
                 'address' => [
-                    'city' => 'New York'
-                ]
+                    'city' => 'New York',
+                ],
             ],
-            'active' => true
+            'active' => true,
         ];
 
         $expected = [
             'user/name' => 'John',
             'user/address/city' => 'New York',
-            'active' => true
+            'active' => true,
         ];
 
         $this->assertSame($expected, array_collapse($input, PHP_INT_MAX, '/'));
@@ -54,7 +54,7 @@ final class ArraysTest extends TestCase
     {
         $a = [1, 2];
         $b = ['a', 'b'];
-        
+
         $expected = [
             [1, 'a'],
             [1, 'b'],

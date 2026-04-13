@@ -10,8 +10,6 @@ use PlanB\Domain\Criteria\OrderDir;
 
 class CriteriaTest extends TestCase
 {
-
-
     public function test_it_manage_empty_data_properly()
     {
         $criteria = Criteria::empty();

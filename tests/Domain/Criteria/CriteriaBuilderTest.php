@@ -62,10 +62,10 @@ class CriteriaBuilderTest extends TestCase
             'name' => ['equals' => 'pepe'],
             'order' => [
                 0 => [],
-                'age' => 'desc'
+                'age' => 'desc',
             ],
             'page' => 5,
-            'itemsPerPage' => 50
+            'itemsPerPage' => 50,
         ])
             ->build();
 
@@ -117,7 +117,7 @@ class CriteriaBuilderTest extends TestCase
             'name' => ['equals' => 'pepe'],
             'order' => ['age' => 'desc'],
             'page' => 5,
-            'itemsPerPage' => 50
+            'itemsPerPage' => 50,
         ])
             ->build();
 
@@ -136,7 +136,7 @@ class CriteriaBuilderTest extends TestCase
             'name' => ['equals' => 'pepe'],
             'order' => ['age' => 'desc'],
             'page' => 5,
-            'itemsPerPage' => 50
+            'itemsPerPage' => 50,
         ])
             ->build();
 
