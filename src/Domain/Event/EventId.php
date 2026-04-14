@@ -15,6 +15,6 @@ namespace PlanB\Domain\Event;
 
 use PlanB\Domain\Model\EntityId;
 
-final class EventId extends EntityId
+readonly final class EventId extends EntityId
 {
 }

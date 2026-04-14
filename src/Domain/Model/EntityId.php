@@ -6,7 +6,7 @@ namespace PlanB\Domain\Model;
 
 use Symfony\Component\Uid\Ulid;
 
-abstract class EntityId
+readonly abstract class EntityId
 {
     protected Ulid $ulid;
 

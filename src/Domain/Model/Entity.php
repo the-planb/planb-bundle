@@ -6,5 +6,7 @@ namespace PlanB\Domain\Model;
 
 interface Entity
 {
-    public function getId(): EntityId;
+    public EntityId $id {
+        get;
+    }
 }

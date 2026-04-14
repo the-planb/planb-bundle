@@ -131,11 +131,12 @@ final class FixtureBuilder
 
 class EntityExample implements Entity
 {
-    public function getId(): EntityId
+    public private(set) EntityId $id;
+
+    public function __construct()
     {
-        $id = new class () extends EntityId {
+        $this->id = new readonly class () extends EntityId {
         };
-        return $id;
     }
 }
 
@@ -150,15 +151,6 @@ class FixtureExample extends UseCaseFixture
         });
 
         $this->loadSqlFile(__DIR__ . '/data/data.sql');
-    }
-
-    public function loadRandomData(): void
-    {
-        $this->createRandomRange(10, function () {
-            $this->handle(new \stdClass());
-
-            return new EntityExample();
-        });
     }
 
     public function allowedEnvironments(): array
